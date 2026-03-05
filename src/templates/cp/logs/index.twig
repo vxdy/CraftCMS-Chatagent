@@ -12,8 +12,8 @@
         {% if enableRatings %}
         <select name="rating" class="text" style="padding: 6px 10px; font-size: 14px">
             <option value="" {% if not rating %}selected{% endif %}>{{ "All ratings"|t('chatagent') }}</option>
-            <option value="up"   {% if rating == 'up'   %}selected{% endif %}>👍 {{ "Positive"|t('chatagent') }}</option>
-            <option value="down" {% if rating == 'down' %}selected{% endif %}>👎 {{ "Negative"|t('chatagent') }}</option>
+            <option value="up"   {% if rating == 'up'   %}selected{% endif %}>{{ "Positive"|t('chatagent') }}</option>
+            <option value="down" {% if rating == 'down' %}selected{% endif %}>{{ "Negative"|t('chatagent') }}</option>
         </select>
         {% endif %}
         <select name="confidence" class="text" style="padding: 6px 10px; font-size: 14px">

@@ -17,15 +17,15 @@ class TrainingJob extends BaseJob
         $entry = Entry::find()->id($this->entryId)->status(null)->one();
 
         if (!$entry) {
-            Craft::warning("TrainingJob: Entry #{$this->entryId} nicht gefunden – Job wird übersprungen.", __METHOD__);
+            Craft::warning("TrainingJob: Entry #{$this->entryId} not found – skipping job.", __METHOD__);
             return;
         }
 
         try {
             $count = Chatagent::getInstance()->getTrainingService()->trainEntry($entry);
-            Craft::info("TrainingJob: Entry #{$this->entryId} ({$entry->title}) – {$count} Chunks indexiert.", __METHOD__);
+            Craft::info("TrainingJob: Entry #{$this->entryId} ({$entry->title}) – {$count} chunks indexed.", __METHOD__);
         } catch (\Throwable $e) {
-            Craft::error("TrainingJob: Entry #{$this->entryId} fehlgeschlagen: " . $e->getMessage(), __METHOD__);
+            Craft::error("TrainingJob: Entry #{$this->entryId} failed: " . $e->getMessage(), __METHOD__);
             throw $e;
         }
     }

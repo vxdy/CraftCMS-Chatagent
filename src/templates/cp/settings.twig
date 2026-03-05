@@ -283,7 +283,8 @@
                 </div>
                 <div class="input">
                     <textarea id="suggestions" name="suggestions" rows="10"
-                              class="nicetext code fullwidth">{{ settings.suggestions | default([]) | join('\n') }}</textarea>
+                              class="nicetext code fullwidth"
+                              style="border: 1px solid #d0d5dd; border-radius: 4px;">{{ settings.suggestions | default([]) | join('\n') }}</textarea>
                 </div>
             </div>
 

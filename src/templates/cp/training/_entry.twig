@@ -7,7 +7,7 @@
     <button id="btn-retrain-entry" class="btn submit" type="button"
             data-entry-id="{{ entryId }}">
         <span class="spinner hidden" style="margin-right: 6px"></span>
-        Neu trainieren
+        Re-train
     </button>
 {% endblock %}
 
@@ -18,7 +18,7 @@
     <div class="pane" style="margin-bottom: 24px; padding: 16px 20px">
         <table class="data">
             <tr>
-                <th style="width: 140px">Entry-ID</th>
+                <th style="width: 140px">Entry ID</th>
                 <td>#{{ entryId }}</td>
             </tr>
             <tr>
@@ -51,7 +51,7 @@
         <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px">
             <strong>Chunk #{{ chunk.chunk_index + 1 }}</strong>
             <span style="font-size: 12px; color: #8f98a3">
-                Indexiert: {{ chunk.indexed_at|date('d.m.Y H:i') }}
+                Indexed: {{ chunk.indexed_at|date('d.m.Y H:i') }}
             </span>
         </div>
 
@@ -69,8 +69,8 @@
         ">{{ chunk.chunk_text }}</pre>
 
         <div style="font-size: 12px; color: #8f98a3">
-            <strong>Embedding-Vorschau</strong>
-            (erste 5 Werte):
+            <strong>Embedding preview</strong>
+            (first 5 values):
             <code style="margin-left: 6px">
                 [{% for val in chunk.embedding_preview %}{{ val|round(6) }}{% if not loop.last %}, {% endif %}{% endfor %}, …]
             </code>
@@ -80,7 +80,7 @@
     {% endfor %}
 
     <div style="margin-top: 16px">
-        <a href="{{ cpUrl('chatagent/training') }}" class="btn">← Zurück zur Übersicht</a>
+        <a href="{{ cpUrl('chatagent/training') }}" class="btn">← Back to overview</a>
     </div>
 
 </div>
@@ -107,19 +107,19 @@
             try {
                 var data = JSON.parse(xhr.responseText);
                 if (data.success) {
-                    alert('Erfolgreich neu trainiert: ' + data.chunks + ' Chunks. Seite wird neu geladen.');
+                    alert('Successfully re-trained: ' + data.chunks + ' chunks. Reloading page.');
                     location.reload();
                 } else {
-                    alert('Fehler: ' + data.error);
+                    alert('Error: ' + data.error);
                 }
             } catch (e) {
-                alert('Ungültige Serverantwort.');
+                alert('Invalid server response.');
             }
         };
         xhr.onerror = function () {
             btn.disabled = false;
             btn.querySelector('.spinner').classList.add('hidden');
-            alert('Netzwerkfehler.');
+            alert('Network error.');
         };
         xhr.send(JSON.stringify({ entryId: entryId, CRAFT_CSRF_TOKEN: csrfToken }));
     });

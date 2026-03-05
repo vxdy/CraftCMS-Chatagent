@@ -117,10 +117,10 @@ class ChatService extends Component
             }
 
             // 4. Build system prompt
-            $baseSystemPrompt = $settings['systemPrompt'] ?: 'Du bist ein freundlicher Assistent für AMR Eventtechnik. Beantworte Fragen auf Deutsch.';
+            $baseSystemPrompt = $settings['systemPrompt'] ?: 'You are a friendly assistant. Answer questions helpfully and concisely.';
             $systemPrompt = $baseSystemPrompt;
             if ($contextText !== '') {
-                $systemPrompt .= "\n\nNutze die folgenden Informationen aus der Wissensdatenbank, um die Frage des Nutzers zu beantworten:\n\n" . $contextText;
+                $systemPrompt .= "\n\nUse the following information from the knowledge base to answer the user's question:\n\n" . $contextText;
             }
 
             // 5. Build messages array (with recent session history)
@@ -144,7 +144,7 @@ class ChatService extends Component
 
         } catch (\Throwable $e) {
             Craft::error('ChatService RAG pipeline error: ' . $e->getMessage(), __METHOD__);
-            $botResponse = 'Es tut mir leid, es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.';
+            $botResponse = 'I\'m sorry, an error occurred. Please try again.';
         }
 
         $responseTimeMs = (int)((microtime(true) - $startTime) * 1000);
@@ -197,7 +197,7 @@ class ChatService extends Component
         curl_close($ch);
 
         if ($curlError) {
-            throw new \RuntimeException('cURL-Fehler beim OpenAI-Aufruf: ' . $curlError);
+            throw new \RuntimeException('cURL error during OpenAI request: ' . $curlError);
         }
 
         if ($httpCode < 200 || $httpCode >= 300) {

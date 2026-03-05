@@ -46,7 +46,7 @@ class EmbeddingService extends Component
         curl_close($ch);
 
         if ($curlError) {
-            throw new \RuntimeException('cURL-Fehler beim Embedding-Aufruf: ' . $curlError);
+            throw new \RuntimeException('cURL error during Embedding request: ' . $curlError);
         }
 
         if ($httpCode < 200 || $httpCode >= 300) {

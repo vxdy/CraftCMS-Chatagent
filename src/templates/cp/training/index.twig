@@ -4,7 +4,7 @@
 {% set selectedSubnavItem = "training" %}
 
 {% block actionButton %}
-    <a href="{{ cpUrl('chatagent/settings#tab-training') }}" class="btn">Einstellungen</a>
+    <a href="{{ cpUrl('chatagent/settings#tab-training') }}" class="btn">Settings</a>
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,7 @@
     {# ── Tab Navigation ──────────────────────────────────────────────── #}
     <nav class="custom-tabs" style="display:flex; border-bottom: 2px solid #e3e5e8; margin-bottom: 24px; gap: 0;">
         <button type="button" class="custom-tab sel" data-target="tab-entries">Craft Entries</button>
-        <button type="button" class="custom-tab" data-target="tab-files">Dateien</button>
+        <button type="button" class="custom-tab" data-target="tab-files">Files</button>
         <button type="button" class="custom-tab" data-target="tab-urls">URLs</button>
         <button type="button" class="custom-tab" data-target="tab-qa">Q&amp;A Training</button>
     </nav>
@@ -32,11 +32,11 @@
         <div class="pane" style="margin: 0 0 24px; padding: 16px 20px; background: #f3f7fc; border-left: 4px solid #0d78f2;">
             <strong style="font-size: 14px; color: #3f4d5a;">Craft Entries</strong>
             <p style="margin: 6px 0 0; font-size: 13px; color: #596673; line-height: 1.6;">
-                Hier legst du fest, welche Seiteninhalte der Chatbot kennen soll. Welche Bereiche berücksichtigt werden,
-                stellst du unter <a href="{{ cpUrl('chatagent/settings') }}" style="color: #0d78f2;">Einstellungen → Training</a> ein.
-                Klicke auf <em>Jetzt trainieren</em>, um alle ausgewählten Bereiche zu verarbeiten –
-                danach kann der Chatbot Fragen zu diesen Inhalten beantworten.
-                Einzelne Einträge lassen sich über die Tabelle gezielt aktualisieren.
+                Define which page content the chatbot should know. Which sections are included can be configured under
+                <a href="{{ cpUrl('chatagent/settings') }}" style="color: #0d78f2;">Settings → Training</a>.
+                Click <em>Train now</em> to process all selected sections –
+                afterwards the chatbot can answer questions about this content.
+                Individual entries can be updated selectively via the table below.
             </p>
         </div>
 
@@ -45,12 +45,12 @@
 
             <div class="pane" style="margin: 0; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px 16px">
                 <div style="font-size: 2.2em; font-weight: bold; color: var(--link-color); line-height: 1.1">{{ stats.totalEntries }}</div>
-                <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">Indexierte Entries</div>
+                <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">Indexed Entries</div>
             </div>
 
             <div class="pane" style="margin: 0; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px 16px">
                 <div style="font-size: 2.2em; font-weight: bold; color: var(--link-color); line-height: 1.1">{{ stats.totalChunks }}</div>
-                <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">Gesamt-Chunks</div>
+                <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">Total Chunks</div>
             </div>
 
             <div class="pane" style="margin: 0; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px 16px">
@@ -68,9 +68,9 @@
                     {{ stats.lastIndexed ? stats.lastIndexed|date('d.m.Y') : '–' }}
                 </div>
                 <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">
-                    Letztes Training
+                    Last Training
                     {% if stats.lastIndexed %}
-                        <span style="display: block; font-size: 11px; margin-top: 2px; font-weight: 400">{{ stats.lastIndexed|date('H:i') }} Uhr</span>
+                        <span style="display: block; font-size: 11px; margin-top: 2px; font-weight: 400">{{ stats.lastIndexed|date('H:i') }}</span>
                     {% endif %}
                 </div>
             </div>
@@ -82,11 +82,11 @@
 
             <button id="btn-train-all" class="btn submit" type="button">
                 <span class="spinner hidden" style="margin-right: 6px"></span>
-                Jetzt trainieren
+                Train now
             </button>
 
             <button id="btn-clear-index" class="btn" type="button" style="color: #cf1124">
-                Index leeren
+                Clear index
             </button>
 
             <span id="training-status" style="color: #8f98a3; font-size: 13px"></span>
@@ -110,8 +110,8 @@
                             <th>Entry</th>
                             <th>Section</th>
                             <th>Chunks</th>
-                            <th>Zuletzt indexiert</th>
-                            <th style="width: 180px">Aktionen</th>
+                            <th>Last indexed</th>
+                            <th style="width: 180px">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -127,17 +127,17 @@
                             <td>{{ entry.last_indexed|date('d.m.Y H:i') }}</td>
                             <td>
                                 <div style="display: flex; gap: 6px">
-                                    <a href="{{ cpUrl('chatagent/training/entry/' ~ entry.entry_id) }}" class="btn small">Ansehen</a>
+                                    <a href="{{ cpUrl('chatagent/training/entry/' ~ entry.entry_id) }}" class="btn small">View</a>
                                     <button class="btn small btn-retrain" type="button"
                                             data-entry-id="{{ entry.entry_id }}"
                                             data-title="{{ entry.title|escape('html_attr') }}">
-                                        Neu trainieren
+                                        Re-train
                                     </button>
                                     <button class="btn small btn-delete-entry" type="button"
                                             data-entry-id="{{ entry.entry_id }}"
                                             data-title="{{ entry.title|escape('html_attr') }}"
                                             style="color: #cf1124">
-                                        Löschen
+                                        Delete
                                     </button>
                                 </div>
                             </td>
@@ -148,25 +148,25 @@
             </div>
         {% else %}
             <div class="pane" style="text-align: center; padding: 40px; color: #8f98a3">
-                <p>Noch keine Trainingsdaten vorhanden.</p>
-                <p>Wähle unter <a href="{{ cpUrl('chatagent/settings#tab-training') }}">Einstellungen → Training</a> die gewünschten Sections aus und klicke dann auf "Jetzt trainieren".</p>
+                <p>No training data yet.</p>
+                <p>Select the desired sections under <a href="{{ cpUrl('chatagent/settings#tab-training') }}">Settings → Training</a> and then click "Train now".</p>
             </div>
         {% endif %}
 
     </div>{# /tab-entries #}
 
     {# ══════════════════════════════════════════════════════════════════ #}
-    {# Tab 2: Dateien                                                      #}
+    {# Tab 2: Files                                                        #}
     {# ══════════════════════════════════════════════════════════════════ #}
     <div id="tab-files" class="hidden">
 
         {# Description #}
         <div class="pane" style="margin: 0 0 24px; padding: 16px 20px; background: #f3f7fc; border-left: 4px solid #0d78f2;">
-            <strong style="font-size: 14px; color: #3f4d5a;">Dateien</strong>
+            <strong style="font-size: 14px; color: #3f4d5a;">Files</strong>
             <p style="margin: 6px 0 0; font-size: 13px; color: #596673; line-height: 1.6;">
-                Lade Textdateien hoch, die der Chatbot als Wissensquelle nutzen soll – z.&nbsp;B. FAQs,
-                Produktbeschreibungen oder interne Dokumente. Nach dem Hochladen stehen die Inhalte dem Chatbot sofort zur Verfügung.
-                Unterstützte Formate: <code>.txt</code>, <code>.md</code>.
+                Upload text files that the chatbot should use as a knowledge source – e.g. FAQs,
+                product descriptions or internal documents. After uploading, the content is immediately available to the chatbot.
+                Supported formats: <code>.txt</code>, <code>.md</code>.
             </p>
         </div>
 
@@ -175,12 +175,12 @@
 
             <div class="pane" style="margin: 0; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px 16px">
                 <div id="file-stat-count" style="font-size: 2.2em; font-weight: bold; color: var(--link-color); line-height: 1.1">{{ fileStats.totalFiles }}</div>
-                <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">Indexierte Dateien</div>
+                <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">Indexed Files</div>
             </div>
 
             <div class="pane" style="margin: 0; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px 16px">
                 <div id="file-stat-chunks" style="font-size: 2.2em; font-weight: bold; color: var(--link-color); line-height: 1.1">{{ fileStats.totalChunks }}</div>
-                <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">Datei-Chunks</div>
+                <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">File Chunks</div>
             </div>
 
             <div class="pane" style="margin: 0; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px 16px">
@@ -188,9 +188,9 @@
                     {{ fileStats.lastIndexed ? fileStats.lastIndexed|date('d.m.Y') : '–' }}
                 </div>
                 <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">
-                    Letztes Training
+                    Last indexed
                     {% if fileStats.lastIndexed %}
-                        <span style="display: block; font-size: 11px; margin-top: 2px; font-weight: 400">{{ fileStats.lastIndexed|date('H:i') }} Uhr</span>
+                        <span style="display: block; font-size: 11px; margin-top: 2px; font-weight: 400">{{ fileStats.lastIndexed|date('H:i') }}</span>
                     {% endif %}
                 </div>
             </div>
@@ -201,8 +201,8 @@
         <div id="file-upload-area"
              style="border: 2px dashed #d0d5dd; border-radius: 10px; padding: 40px 24px; text-align: center; margin-bottom: 24px; cursor: pointer; transition: border-color 0.2s, background 0.2s;">
             <div style="font-size: 28px; margin-bottom: 8px">📄</div>
-            <div style="font-weight: 600; margin-bottom: 4px; color: #3f4d5a">Datei hier ablegen oder klicken</div>
-            <div style="font-size: 13px; color: #8f98a3">Unterstützte Formate: .txt, .md &nbsp;·&nbsp; Maximal 5 MB</div>
+            <div style="font-weight: 600; margin-bottom: 4px; color: #3f4d5a">Drop file here or click to browse</div>
+            <div style="font-size: 13px; color: #8f98a3">Supported formats: .txt, .md &nbsp;·&nbsp; Maximum 5 MB</div>
             <input type="file" id="file-input" accept=".txt,.md" style="display:none">
         </div>
 
@@ -215,12 +215,12 @@
                 <table class="data fullwidth" id="files-table">
                     <thead>
                         <tr>
-                            <th>Dateiname</th>
-                            <th>Typ</th>
-                            <th>Größe</th>
+                            <th>Filename</th>
+                            <th>Type</th>
+                            <th>Size</th>
                             <th>Chunks</th>
-                            <th>Zuletzt indexiert</th>
-                            <th style="width: 160px">Aktionen</th>
+                            <th>Last indexed</th>
+                            <th style="width: 160px">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="files-tbody">
@@ -236,13 +236,13 @@
                                     <button class="btn small btn-retrain-file" type="button"
                                             data-file-id="{{ file.id }}"
                                             data-name="{{ file.original_name|escape('html_attr') }}">
-                                        Neu indexieren
+                                        Re-index
                                     </button>
                                     <button class="btn small btn-delete-file" type="button"
                                             data-file-id="{{ file.id }}"
                                             data-name="{{ file.original_name|escape('html_attr') }}"
                                             style="color: #cf1124">
-                                        Löschen
+                                        Delete
                                     </button>
                                 </div>
                             </td>
@@ -253,8 +253,8 @@
             </div>
         {% else %}
             <div id="files-empty" class="pane" style="text-align: center; padding: 40px; color: #8f98a3">
-                <p>Noch keine Dateien hochgeladen.</p>
-                <p>Lade eine <code>.txt</code> oder <code>.md</code> Datei hoch, um sie als Wissensquelle für den Chatbot zu indexieren.</p>
+                <p>No files uploaded yet.</p>
+                <p>Upload a <code>.txt</code> or <code>.md</code> file to index it as a knowledge source for the chatbot.</p>
             </div>
         {% endif %}
         </div>
@@ -270,9 +270,9 @@
         <div class="pane" style="margin: 0 0 24px; padding: 16px 20px; background: #f3f7fc; border-left: 4px solid #0d78f2;">
             <strong style="font-size: 14px; color: #3f4d5a;">URLs</strong>
             <p style="margin: 6px 0 0; font-size: 13px; color: #596673; line-height: 1.6;">
-                Füge Webseiten hinzu, auf deren Inhalte der Chatbot antworten soll. Die Seiten werden automatisch ausgelesen
-                und ihr Inhalt dem Chatbot bekannt gemacht. Mit dem <strong>Sitemap-Import</strong> lassen sich alle Unterseiten
-                einer Website auf einmal hinzufügen. Der Chatbot kann bei passenden Fragen dann auch direkte Links zur Navigation ausgeben.
+                Add web pages whose content the chatbot should be able to answer questions about. Pages are automatically
+                read and their content made available to the chatbot. The <strong>Sitemap import</strong> lets you add all
+                sub-pages of a website at once. For matching questions the chatbot can also return direct navigation links.
             </p>
         </div>
 
@@ -281,17 +281,17 @@
 
             <div class="pane" style="margin: 0; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px 16px">
                 <div id="url-stat-total" style="font-size: 2.2em; font-weight: bold; color: var(--link-color); line-height: 1.1">{{ crawlStats.total }}</div>
-                <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">URLs gesamt</div>
+                <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">Total URLs</div>
             </div>
 
             <div class="pane" style="margin: 0; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px 16px">
                 <div id="url-stat-indexed" style="font-size: 2.2em; font-weight: bold; color: #27ab83; line-height: 1.1">{{ crawlStats.indexed }}</div>
-                <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">Indexiert</div>
+                <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">Indexed</div>
             </div>
 
             <div class="pane" style="margin: 0; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px 16px">
                 <div id="url-stat-chunks" style="font-size: 2.2em; font-weight: bold; color: var(--link-color); line-height: 1.1">{{ crawlStats.totalChunks }}</div>
-                <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">URL-Chunks</div>
+                <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">URL Chunks</div>
             </div>
 
             <div class="pane" style="margin: 0; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px 16px">
@@ -299,9 +299,9 @@
                     {{ crawlStats.lastCrawled ? crawlStats.lastCrawled|date('d.m.Y') : '–' }}
                 </div>
                 <div style="color: #8f98a3; margin-top: 6px; font-size: 13px; font-weight: 600">
-                    Letzter Crawl
+                    Last crawl
                     {% if crawlStats.lastCrawled %}
-                        <span style="display: block; font-size: 11px; margin-top: 2px; font-weight: 400">{{ crawlStats.lastCrawled|date('H:i') }} Uhr</span>
+                        <span style="display: block; font-size: 11px; margin-top: 2px; font-weight: 400">{{ crawlStats.lastCrawled|date('H:i') }}</span>
                     {% endif %}
                 </div>
             </div>
@@ -310,24 +310,24 @@
 
         {# Sitemap Import #}
         <div class="pane" style="padding: 16px 20px; margin-bottom: 20px">
-            <div style="font-weight: 600; margin-bottom: 10px; font-size: 14px">Sitemap importieren</div>
+            <div style="font-weight: 600; margin-bottom: 10px; font-size: 14px">Import sitemap</div>
             <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap">
                 <input type="url" id="sitemap-url-input" class="text" placeholder="https://example.com/sitemap.xml"
                        style="flex: 1; min-width: 260px; padding: 8px 12px; font-size: 14px">
-                <button id="btn-import-sitemap" class="btn submit" type="button">Importieren</button>
+                <button id="btn-import-sitemap" class="btn submit" type="button">Import</button>
             </div>
             <div id="sitemap-status" style="display:none; margin-top: 10px; font-size: 13px; padding: 8px 12px; border-radius: 5px"></div>
         </div>
 
         {# Manual URL Input #}
         <div class="pane" style="padding: 16px 20px; margin-bottom: 20px">
-            <div style="font-weight: 600; margin-bottom: 6px; font-size: 14px">URLs manuell hinzufügen</div>
-            <div style="font-size: 13px; color: #8f98a3; margin-bottom: 10px">Eine URL pro Zeile.</div>
+            <div style="font-weight: 600; margin-bottom: 6px; font-size: 14px">Add URLs manually</div>
+            <div style="font-size: 13px; color: #8f98a3; margin-bottom: 10px">One URL per line.</div>
             <textarea id="manual-urls-input" class="nicetext fullwidth" rows="4"
                       placeholder="https://example.com/page-1&#10;https://example.com/page-2"
                       style="font-size: 13px; font-family: monospace"></textarea>
             <div style="margin-top: 8px; display: flex; gap: 8px; align-items: center">
-                <button id="btn-add-urls" class="btn submit" type="button">URLs hinzufügen</button>
+                <button id="btn-add-urls" class="btn submit" type="button">Add URLs</button>
                 <span id="add-urls-status" style="font-size: 13px; color: #8f98a3"></span>
             </div>
         </div>
@@ -336,11 +336,11 @@
         <div style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap">
             <button id="btn-crawl-all" class="btn submit" type="button">
                 <span class="spinner hidden" style="margin-right: 6px"></span>
-                Alle crawlen &amp; indexieren
+                Crawl all &amp; index
             </button>
             <button id="btn-clear-urls" class="btn" type="button" style="color: #cf1124">
                 <span class="spinner hidden" style="margin-right: 6px"></span>
-                Alle URLs löschen
+                Delete all URLs
             </button>
             <span id="crawl-progress-text" style="font-size: 13px; color: #8f98a3"></span>
         </div>
@@ -353,11 +353,11 @@
                     <thead>
                         <tr>
                             <th>URL</th>
-                            <th>Titel</th>
+                            <th>Title</th>
                             <th style="width:90px">Status</th>
                             <th style="width:60px">Chunks</th>
-                            <th style="width:130px">Gecrawlt</th>
-                            <th style="width:130px">Aktionen</th>
+                            <th style="width:130px">Crawled</th>
+                            <th style="width:130px">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="url-tbody">
@@ -373,12 +373,12 @@
                             <td>
                                 <div style="display:flex; gap:6px">
                                     <a href="{{ cpUrl('chatagent/training/url/' ~ row.id) }}"
-                                       class="btn small">Ansehen</a>
+                                       class="btn small">View</a>
                                     <button class="btn small btn-crawl-single" type="button"
-                                            data-url-id="{{ row.id }}">Neu crawlen</button>
+                                            data-url-id="{{ row.id }}">Re-crawl</button>
                                     <button class="btn small btn-delete-url" type="button"
                                             data-url-id="{{ row.id }}"
-                                            style="color:#cf1124">Löschen</button>
+                                            style="color:#cf1124">Delete</button>
                                 </div>
                             </td>
                         </tr>
@@ -388,8 +388,8 @@
             </div>
         {% else %}
             <div id="url-empty" class="pane" style="text-align:center; padding:40px; color:#8f98a3">
-                <p>Noch keine URLs hinterlegt.</p>
-                <p>Importiere eine Sitemap oder füge URLs manuell hinzu.</p>
+                <p>No URLs added yet.</p>
+                <p>Import a sitemap or add URLs manually.</p>
             </div>
         {% endif %}
         </div>
@@ -405,9 +405,9 @@
         <div class="pane" style="margin: 0 0 24px; padding: 16px 20px; background: #f3f7fc; border-left: 4px solid #0d78f2;">
             <strong style="font-size: 14px; color: #3f4d5a;">Q&amp;A Training</strong>
             <p style="margin: 6px 0 0; font-size: 13px; color: #596673; line-height: 1.6;">
-                Definiere eigene Frage-Antwort-Paare, die der Chatbot direkt als Wissen nutzt. Importiere Paare aus den
-                <a href="{{ cpUrl('chatagent/logs') }}" style="color: #0d78f2;">Gesprächslogs</a> oder lege sie manuell an.
-                Aktive Paare werden sofort in die Vektordatenbank indexiert und fließen in die Bot-Antworten ein.
+                Define custom question-answer pairs that the chatbot uses directly as knowledge. Import pairs from the
+                <a href="{{ cpUrl('chatagent/logs') }}" style="color: #0d78f2;">Chat Logs</a> or create them manually.
+                Active pairs are immediately indexed into the vector database and included in bot responses.
             </p>
         </div>
 
@@ -415,38 +415,38 @@
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px">
             <div class="pane" style="margin:0; min-height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:24px 16px">
                 <div id="qa-stat-total" style="font-size:2.2em; font-weight:bold; color:var(--link-color); line-height:1.1">{{ qaStats.total }}</div>
-                <div style="color:#8f98a3; margin-top:6px; font-size:13px; font-weight:600">Q&amp;A-Paare gesamt</div>
+                <div style="color:#8f98a3; margin-top:6px; font-size:13px; font-weight:600">Total Q&amp;A pairs</div>
             </div>
             <div class="pane" style="margin:0; min-height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:24px 16px">
                 <div style="font-size:2.2em; font-weight:bold; color:#27ab83; line-height:1.1">{{ qaStats.active }}</div>
-                <div style="color:#8f98a3; margin-top:6px; font-size:13px; font-weight:600">Aktiv (indexiert)</div>
+                <div style="color:#8f98a3; margin-top:6px; font-size:13px; font-weight:600">Active (indexed)</div>
             </div>
             <div class="pane" style="margin:0; min-height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:24px 16px">
                 <div style="font-size:2.2em; font-weight:bold; color:#596673; line-height:1.1">{{ qaStats.fromLog }}</div>
-                <div style="color:#8f98a3; margin-top:6px; font-size:13px; font-weight:600">Aus Logs importiert</div>
+                <div style="color:#8f98a3; margin-top:6px; font-size:13px; font-weight:600">Imported from logs</div>
             </div>
             <div class="pane" style="margin:0; min-height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:24px 16px">
                 <div style="font-size:1em; font-weight:500; color:#596673; line-height:1.4">
-                    {% if qaStats.lastSaved %}{{ qaStats.lastSaved | date('d.m.Y') }}<br><span style="font-size:12px; color:#8f98a3">{{ qaStats.lastSaved | date('H:i') }} Uhr</span>{% else %}–{% endif %}
+                    {% if qaStats.lastSaved %}{{ qaStats.lastSaved | date('d.m.Y') }}<br><span style="font-size:12px; color:#8f98a3">{{ qaStats.lastSaved | date('H:i') }}</span>{% else %}–{% endif %}
                 </div>
-                <div style="color:#8f98a3; margin-top:6px; font-size:13px; font-weight:600">Zuletzt gespeichert</div>
+                <div style="color:#8f98a3; margin-top:6px; font-size:13px; font-weight:600">Last saved</div>
             </div>
         </div>
 
         {# Add new Q&A pair form #}
         <div class="pane" style="margin-bottom: 24px; padding: 20px 24px">
-            <h2 style="margin: 0 0 16px; font-size: 15px; color: #3f4d5a;">Neues Q&amp;A-Paar anlegen</h2>
+            <h2 style="margin: 0 0 16px; font-size: 15px; color: #3f4d5a;">Create new Q&amp;A pair</h2>
             <div style="display: grid; gap: 14px">
                 <div>
-                    <label style="display:block; font-size:12px; font-weight:600; color:#596673; margin-bottom:4px; text-transform:uppercase; letter-spacing:.04em">Frage</label>
-                    <input type="text" id="qa-new-question" placeholder="z.B. Wie viele mitarbeiter habt ihr?" style="width:100%; padding:8px 12px; border:1px solid #d0d5dd; border-radius:5px; font-size:14px; box-sizing:border-box">
+                    <label style="display:block; font-size:12px; font-weight:600; color:#596673; margin-bottom:4px; text-transform:uppercase; letter-spacing:.04em">Question</label>
+                    <input type="text" id="qa-new-question" placeholder="e.g. How many employees do you have?" style="width:100%; padding:8px 12px; border:1px solid #d0d5dd; border-radius:5px; font-size:14px; box-sizing:border-box">
                 </div>
                 <div>
-                    <label style="display:block; font-size:12px; font-weight:600; color:#596673; margin-bottom:4px; text-transform:uppercase; letter-spacing:.04em">Antwort</label>
-                    <textarea id="qa-new-answer" rows="4" placeholder="Die gewünschte Bot-Antwort auf diese Frage…" style="width:100%; padding:8px 12px; border:1px solid #d0d5dd; border-radius:5px; font-size:14px; resize:vertical; box-sizing:border-box; font-family:inherit"></textarea>
+                    <label style="display:block; font-size:12px; font-weight:600; color:#596673; margin-bottom:4px; text-transform:uppercase; letter-spacing:.04em">Answer</label>
+                    <textarea id="qa-new-answer" rows="4" placeholder="The desired bot answer to this question…" style="width:100%; padding:8px 12px; border:1px solid #d0d5dd; border-radius:5px; font-size:14px; resize:vertical; box-sizing:border-box; font-family:inherit"></textarea>
                 </div>
                 <div style="display:flex; align-items:center; gap:12px">
-                    <button type="button" id="btn-save-qa" class="btn submit">Speichern &amp; indexieren</button>
+                    <button type="button" id="btn-save-qa" class="btn submit">Save &amp; index</button>
                     <span id="qa-save-status" style="font-size:13px; color:#596673"></span>
                 </div>
             </div>
@@ -459,11 +459,11 @@
             <table class="data fullwidth" id="qa-table">
                 <thead>
                     <tr>
-                        <th style="width:30%">Frage</th>
-                        <th>Antwort</th>
-                        <th style="width:80px; text-align:center">Quelle</th>
+                        <th style="width:30%">Question</th>
+                        <th>Answer</th>
+                        <th style="width:80px; text-align:center">Source</th>
                         <th style="width:80px; text-align:center">Status</th>
-                        <th style="width:160px">Aktionen</th>
+                        <th style="width:160px">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="qa-tbody">
@@ -477,22 +477,22 @@
                         </td>
                         <td style="text-align:center; vertical-align:top; padding-top:10px">
                             {% if pair.source == 'log' %}
-                                <span class="qa-source-badge qa-source-log" title="Aus Gesprächslog importiert">Log</span>
+                                <span class="qa-source-badge qa-source-log" title="Imported from chat log">Log</span>
                             {% else %}
-                                <span class="qa-source-badge qa-source-manual">Manuell</span>
+                                <span class="qa-source-badge qa-source-manual">Manual</span>
                             {% endif %}
                         </td>
                         <td style="text-align:center; vertical-align:top; padding-top:10px">
-                            <button type="button" class="btn-qa-toggle" data-qa-id="{{ pair.id }}" data-active="{{ pair.is_active ? '1' : '0' }}" title="{{ pair.is_active ? 'Deaktivieren' : 'Aktivieren' }}">
-                                <span class="qa-status-indicator" style="display:inline-block; width:10px; height:10px; border-radius:50%; background:{{ pair.is_active ? '#27ab83' : '#d0d5dd' }}; margin-right:4px"></span>{{ pair.is_active ? 'Aktiv' : 'Inaktiv' }}
+                            <button type="button" class="btn-qa-toggle" data-qa-id="{{ pair.id }}" data-active="{{ pair.is_active ? '1' : '0' }}" title="{{ pair.is_active ? 'Deactivate' : 'Activate' }}">
+                                <span class="qa-status-indicator" style="display:inline-block; width:10px; height:10px; border-radius:50%; background:{{ pair.is_active ? '#27ab83' : '#d0d5dd' }}; margin-right:4px"></span>{{ pair.is_active ? 'Active' : 'Inactive' }}
                             </button>
                         </td>
                         <td style="vertical-align:top; padding-top:8px">
                             <button type="button" class="btn small btn-qa-edit"
                                 data-qa-id="{{ pair.id }}"
                                 data-question="{{ pair.question | e('html_attr') }}"
-                                data-answer="{{ pair.answer | e('html_attr') }}">Bearbeiten</button>
-                            <button type="button" class="btn small btn-qa-delete" data-qa-id="{{ pair.id }}" style="margin-left:4px; color:#cf1124">Löschen</button>
+                                data-answer="{{ pair.answer | e('html_attr') }}">Edit</button>
+                            <button type="button" class="btn small btn-qa-delete" data-qa-id="{{ pair.id }}" style="margin-left:4px; color:#cf1124">Delete</button>
                         </td>
                     </tr>
                     {% endfor %}
@@ -501,8 +501,8 @@
             </div>
         {% else %}
             <div id="qa-empty" class="pane" style="text-align:center; padding:40px; color:#8f98a3">
-                <p>Noch keine Q&amp;A-Paare angelegt.</p>
-                <p>Erstelle dein erstes Paar oder importiere es aus den <a href="{{ cpUrl('chatagent/logs') }}" style="color:#0d78f2">Gesprächslogs</a>.</p>
+                <p>No Q&amp;A pairs created yet.</p>
+                <p>Create your first pair or import one from the <a href="{{ cpUrl('chatagent/logs') }}" style="color:#0d78f2">Chat Logs</a>.</p>
             </div>
         {% endif %}
         </div>
@@ -512,19 +512,19 @@
     {# ── Q&A Edit Modal ─────────────────────────────────────────────── #}
     <div id="qa-edit-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.5); align-items:center; justify-content:center">
         <div style="background:#fff; border-radius:8px; padding:28px 32px; width:600px; max-width:95vw; max-height:90vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,.25)">
-            <h2 style="margin:0 0 20px; font-size:16px; color:#3f4d5a">Q&amp;A-Paar bearbeiten</h2>
+            <h2 style="margin:0 0 20px; font-size:16px; color:#3f4d5a">Edit Q&amp;A pair</h2>
             <input type="hidden" id="qa-edit-id" value="">
             <div style="margin-bottom:14px">
-                <label style="display:block; font-size:12px; font-weight:600; color:#596673; margin-bottom:4px; text-transform:uppercase; letter-spacing:.04em">Frage</label>
+                <label style="display:block; font-size:12px; font-weight:600; color:#596673; margin-bottom:4px; text-transform:uppercase; letter-spacing:.04em">Question</label>
                 <input type="text" id="qa-edit-question" style="width:100%; padding:8px 12px; border:1px solid #d0d5dd; border-radius:5px; font-size:14px; box-sizing:border-box">
             </div>
             <div style="margin-bottom:20px">
-                <label style="display:block; font-size:12px; font-weight:600; color:#596673; margin-bottom:4px; text-transform:uppercase; letter-spacing:.04em">Antwort</label>
+                <label style="display:block; font-size:12px; font-weight:600; color:#596673; margin-bottom:4px; text-transform:uppercase; letter-spacing:.04em">Answer</label>
                 <textarea id="qa-edit-answer" rows="6" style="width:100%; padding:8px 12px; border:1px solid #d0d5dd; border-radius:5px; font-size:14px; resize:vertical; box-sizing:border-box; font-family:inherit"></textarea>
             </div>
             <div style="display:flex; gap:10px; justify-content:flex-end">
-                <button type="button" id="qa-edit-cancel" class="btn">Abbrechen</button>
-                <button type="button" id="qa-edit-save" class="btn submit">Speichern &amp; neu indexieren</button>
+                <button type="button" id="qa-edit-cancel" class="btn">Cancel</button>
+                <button type="button" id="qa-edit-save" class="btn submit">Save &amp; re-index</button>
                 <span id="qa-edit-status" style="font-size:13px; color:#596673; align-self:center"></span>
             </div>
         </div>
@@ -576,9 +576,9 @@
         xhr.setRequestHeader('X-CSRF-Token', csrfToken);
         xhr.onload = function () {
             try { cb(null, JSON.parse(xhr.responseText)); }
-            catch (e) { cb('Ungültige Serverantwort'); }
+            catch (e) { cb('Invalid server response'); }
         };
-        xhr.onerror = function () { cb('Netzwerkfehler'); };
+        xhr.onerror = function () { cb('Network error'); };
         xhr.send(JSON.stringify(Object.assign({ CRAFT_CSRF_TOKEN: csrfToken }, data)));
     }
 
@@ -595,7 +595,7 @@
         btn.querySelector('.spinner').classList.remove('hidden');
         document.getElementById('training-progress').classList.remove('hidden');
         document.getElementById('progress-bar').style.width = '10%';
-        setStatus('Training läuft …');
+        setStatus('Training running …');
 
         apiPost('train', {}, function (err, data) {
             btn.disabled = false;
@@ -603,30 +603,30 @@
             document.getElementById('progress-bar').style.width = '100%';
 
             if (err || !data.success) {
-                setStatus('Fehler: ' + (err || data.error), '#cf1124');
+                setStatus('Error: ' + (err || data.error), '#cf1124');
             } else {
-                var msg = data.message || (data.jobCount + ' Jobs in die Queue eingereiht.');
+                var msg = data.message || (data.jobCount + ' jobs queued.');
                 if (data.errors && data.errors.length) {
-                    msg += ' (' + data.errors.length + ' Warnungen)';
+                    msg += ' (' + data.errors.length + ' warnings)';
                 }
-                setStatus(msg + ' → Fortschritt unter Dienstprogramme → Warteschlange.', '#27ab83');
+                setStatus(msg + ' → Progress under Utilities → Queue.', '#27ab83');
             }
         });
     });
 
     // Clear index
     document.getElementById('btn-clear-index').addEventListener('click', function () {
-        if (!confirm('Wirklich den gesamten Index leeren? Alle Trainingsdaten werden gelöscht.')) return;
+        if (!confirm('Really clear the entire index? All training data will be deleted.')) return;
         var btn = this;
         btn.disabled = true;
-        setStatus('Index wird geleert …');
+        setStatus('Clearing index …');
 
         apiPost('clear-index', {}, function (err, data) {
             btn.disabled = false;
             if (err || !data.success) {
-                setStatus('Fehler: ' + (err || data.error), '#cf1124');
+                setStatus('Error: ' + (err || data.error), '#cf1124');
             } else {
-                setStatus(data.deleted + ' Chunks gelöscht. Seite wird neu geladen …', '#27ab83');
+                setStatus(data.deleted + ' chunks deleted. Reloading page …', '#27ab83');
                 setTimeout(function () { location.reload(); }, 1200);
             }
         });
@@ -642,11 +642,11 @@
 
             apiPost('train-entry', { entryId: entryId }, function (err, data) {
                 btn.disabled = false;
-                btn.textContent = 'Neu trainieren';
+                btn.textContent = 'Re-train';
                 if (err || !data.success) {
-                    alert('Fehler: ' + (err || data.error));
+                    alert('Error: ' + (err || data.error));
                 } else {
-                    alert(data.message || '"' + title + '" Training-Job in die Queue eingereiht.');
+                    alert(data.message || '"' + title + '" training job queued.');
                 }
             });
         });
@@ -657,13 +657,13 @@
         btn.addEventListener('click', function () {
             var entryId = btn.dataset.entryId;
             var title   = btn.dataset.title;
-            if (!confirm('Trainingsdaten für "' + title + '" löschen?')) return;
+            if (!confirm('Delete training data for "' + title + '"?')) return;
             btn.disabled = true;
 
             apiPost('delete-entry', { entryId: entryId }, function (err, data) {
                 btn.disabled = false;
                 if (err || !data.success) {
-                    alert('Fehler: ' + (err || data.error));
+                    alert('Error: ' + (err || data.error));
                 } else {
                     var row = document.querySelector('tr[data-entry-id="' + entryId + '"]');
                     if (row) row.remove();
@@ -730,15 +730,15 @@
         var allowedExts = ['txt', 'md'];
         var ext = file.name.split('.').pop().toLowerCase();
         if (!allowedExts.includes(ext)) {
-            showFileStatus('Fehler: Nur .txt und .md Dateien sind erlaubt.', 'error');
+            showFileStatus('Error: Only .txt and .md files are allowed.', 'error');
             return;
         }
         if (file.size > 5 * 1024 * 1024) {
-            showFileStatus('Fehler: Datei zu groß (max. 5 MB).', 'error');
+            showFileStatus('Error: File too large (max. 5 MB).', 'error');
             return;
         }
 
-        showFileStatus('"' + file.name + '" wird hochgeladen und trainiert …', 'info');
+        showFileStatus('"' + file.name + '" is being uploaded and trained …', 'info');
         document.getElementById('file-upload-area').style.opacity = '0.5';
 
         var formData = new FormData();
@@ -760,15 +760,15 @@
                     appendFileRow(data.fileId, file.name, ext, file.size, data.chunkCount);
                     updateFileStats(1, data.chunkCount);
                 } else {
-                    showFileStatus('Fehler: ' + data.error, 'error');
+                    showFileStatus('Error: ' + data.error, 'error');
                 }
             } catch (e) {
-                showFileStatus('Ungültige Serverantwort.', 'error');
+                showFileStatus('Invalid server response.', 'error');
             }
         };
         xhr.onerror = function () {
             document.getElementById('file-upload-area').style.opacity = '';
-            showFileStatus('Netzwerkfehler beim Upload.', 'error');
+            showFileStatus('Network error during upload.', 'error');
         };
         xhr.send(formData);
     }
@@ -781,7 +781,7 @@
         if (!tbody) {
             // Create table if it doesn't exist yet
             var wrap = document.getElementById('files-table-wrap');
-            wrap.innerHTML = '<div class="tableview"><table class="data fullwidth" id="files-table"><thead><tr><th>Dateiname</th><th>Typ</th><th>Größe</th><th>Chunks</th><th>Zuletzt indexiert</th><th style="width:160px">Aktionen</th></tr></thead><tbody id="files-tbody"></tbody></table></div>';
+            wrap.innerHTML = '<div class="tableview"><table class="data fullwidth" id="files-table"><thead><tr><th>Filename</th><th>Type</th><th>Size</th><th>Chunks</th><th>Last indexed</th><th style="width:160px">Actions</th></tr></thead><tbody id="files-tbody"></tbody></table></div>';
             tbody = document.getElementById('files-tbody');
         }
 
@@ -798,8 +798,8 @@
             '<td>' + chunks + '</td>' +
             '<td>' + dateStr + '</td>' +
             '<td><div style="display:flex;gap:6px">' +
-                '<button class="btn small btn-retrain-file" type="button" data-file-id="' + fileId + '" data-name="' + escAttr(name) + '">Neu indexieren</button>' +
-                '<button class="btn small btn-delete-file" type="button" data-file-id="' + fileId + '" data-name="' + escAttr(name) + '" style="color:#cf1124">Löschen</button>' +
+                '<button class="btn small btn-retrain-file" type="button" data-file-id="' + fileId + '" data-name="' + escAttr(name) + '">Re-index</button>' +
+                '<button class="btn small btn-delete-file" type="button" data-file-id="' + fileId + '" data-name="' + escAttr(name) + '" style="color:#cf1124">Delete</button>' +
             '</div></td>';
         tbody.prepend(tr);
         bindFileRowButtons(tr);
@@ -831,9 +831,9 @@
 
         apiPost('retrain-file', { fileId: fileId }, function (err, data) {
             btn.disabled = false;
-            btn.textContent = 'Neu indexieren';
+            btn.textContent = 'Re-index';
             if (err || !data.success) {
-                alert('Fehler: ' + (err || data.error));
+                alert('Error: ' + (err || data.error));
             } else {
                 // Update chunk count in row
                 var row = document.querySelector('tr[data-file-id="' + fileId + '"]');
@@ -852,13 +852,13 @@
         var btn    = this;
         var fileId = btn.dataset.fileId;
         var name   = btn.dataset.name;
-        if (!confirm('Datei "' + name + '" und ihre Trainingsdaten löschen?')) return;
+        if (!confirm('Delete file "' + name + '" and its training data?')) return;
         btn.disabled = true;
 
         apiPost('delete-file', { fileId: fileId }, function (err, data) {
             btn.disabled = false;
             if (err || !data.success) {
-                alert('Fehler: ' + (err || data.error));
+                alert('Error: ' + (err || data.error));
             } else {
                 var row = document.querySelector('tr[data-file-id="' + fileId + '"]');
                 if (row) {
@@ -907,7 +907,7 @@
         if (!tbody) {
             document.getElementById('url-table-wrap').innerHTML =
                 '<div class="tableview"><table class="data fullwidth" id="url-table">' +
-                '<thead><tr><th>URL</th><th>Titel</th><th style="width:90px">Status</th><th style="width:60px">Chunks</th><th style="width:130px">Gecrawlt</th><th style="width:130px">Aktionen</th></tr></thead>' +
+                '<thead><tr><th>URL</th><th>Title</th><th style="width:90px">Status</th><th style="width:60px">Chunks</th><th style="width:130px">Crawled</th><th style="width:130px">Actions</th></tr></thead>' +
                 '<tbody id="url-tbody"></tbody></table></div>';
             tbody = document.getElementById('url-tbody');
         }
@@ -922,9 +922,9 @@
             '<td class="url-chunk-cell">' + (chunkCount || '–') + '</td>' +
             '<td style="font-size:12px;color:#8f98a3" class="url-date-cell">–</td>' +
             '<td><div style="display:flex;gap:6px">' +
-                '<a href="{{ cpUrl("chatagent/training/url") }}/' + urlId + '" class="btn small">Ansehen</a>' +
-                '<button class="btn small btn-crawl-single" type="button" data-url-id="' + urlId + '">Neu crawlen</button>' +
-                '<button class="btn small btn-delete-url" type="button" data-url-id="' + urlId + '" style="color:#cf1124">Löschen</button>' +
+                '<a href="{{ cpUrl("chatagent/training/url") }}/' + urlId + '" class="btn small">View</a>' +
+                '<button class="btn small btn-crawl-single" type="button" data-url-id="' + urlId + '">Re-crawl</button>' +
+                '<button class="btn small btn-delete-url" type="button" data-url-id="' + urlId + '" style="color:#cf1124">Delete</button>' +
             '</div></td>';
         tbody.prepend(tr);
         bindUrlRowButtons(tr);
@@ -964,11 +964,11 @@
 
         apiPost('crawl-url', { urlId: urlId }, function (err, data) {
             btn.disabled = false;
-            btn.textContent = 'Neu crawlen';
+            btn.textContent = 'Re-crawl';
             if (!err && data.success) {
-                alert('URL zur Warteschlange hinzugefügt. Der Fortschritt ist im Queue Manager sichtbar.');
+                alert('URL added to queue. Progress is visible in the Queue Manager.');
             } else {
-                alert('Fehler: ' + (data && data.error ? data.error : 'Unbekannt'));
+                alert('Error: ' + (data && data.error ? data.error : 'Unknown'));
             }
         });
     }
@@ -976,11 +976,11 @@
     function deleteUrlHandler() {
         var btn   = this;
         var urlId = btn.dataset.urlId;
-        if (!confirm('URL und ihre Indexdaten löschen?')) return;
+        if (!confirm('Delete URL and its index data?')) return;
         btn.disabled = true;
         apiPost('delete-url', { urlId: urlId }, function (err, data) {
             btn.disabled = false;
-            if (err || !data.success) { alert('Fehler: ' + (err || data.error)); return; }
+            if (err || !data.success) { alert('Error: ' + (err || data.error)); return; }
             var row = document.querySelector('tr[data-url-id="' + urlId + '"]');
             if (row) row.remove();
         });
@@ -998,16 +998,16 @@
     document.getElementById('btn-import-sitemap').addEventListener('click', function () {
         var btn         = this;
         var sitemapUrl  = document.getElementById('sitemap-url-input').value.trim();
-        if (!sitemapUrl) { showSitemapStatus('Bitte eine Sitemap-URL eingeben.', 'error'); return; }
+        if (!sitemapUrl) { showSitemapStatus('Please enter a sitemap URL.', 'error'); return; }
         btn.disabled = true;
         btn.textContent = '…';
-        showSitemapStatus('Sitemap wird geladen …', 'info');
+        showSitemapStatus('Loading sitemap …', 'info');
 
         apiPost('import-sitemap', { sitemapUrl: sitemapUrl }, function (err, data) {
             btn.disabled = false;
-            btn.textContent = 'Importieren';
+            btn.textContent = 'Import';
             if (err || !data.success) {
-                showSitemapStatus('Fehler: ' + (err || data.error), 'error');
+                showSitemapStatus('Error: ' + (err || data.error), 'error');
             } else {
                 showSitemapStatus(data.message, 'success');
                 // Refresh URL list: append new rows
@@ -1029,12 +1029,12 @@
     document.getElementById('btn-add-urls').addEventListener('click', function () {
         var btn    = this;
         var raw    = document.getElementById('manual-urls-input').value;
-        if (!raw.trim()) { document.getElementById('add-urls-status').textContent = 'Bitte URLs eingeben.'; return; }
+        if (!raw.trim()) { document.getElementById('add-urls-status').textContent = 'Please enter URLs.'; return; }
         btn.disabled = true;
         apiPost('add-urls', { urls: raw }, function (err, data) {
             btn.disabled = false;
             if (err || !data.success) {
-                document.getElementById('add-urls-status').textContent = 'Fehler: ' + (err || data.error);
+                document.getElementById('add-urls-status').textContent = 'Error: ' + (err || data.error);
             } else {
                 document.getElementById('add-urls-status').textContent = data.message;
                 document.getElementById('manual-urls-input').value = '';
@@ -1046,7 +1046,7 @@
 
     // Clear All URLs — single server-side operation
     document.getElementById('btn-clear-urls').addEventListener('click', function () {
-        if (!confirm('Alle URLs löschen?')) return;
+        if (!confirm('Delete all URLs?')) return;
         var btn = this;
         btn.disabled = true;
         btn.querySelector('.spinner').classList.remove('hidden');
@@ -1057,7 +1057,7 @@
             if (!err && data.success) {
                 location.reload();
             } else {
-                alert('Fehler: ' + (data && data.error ? data.error : 'Unbekannt'));
+                alert('Error: ' + (data && data.error ? data.error : 'Unknown'));
             }
         });
     });
@@ -1067,23 +1067,23 @@
         var btn  = this;
         var rows = Array.from(document.querySelectorAll('#url-tbody tr[data-url-id]'));
         if (!rows.length) {
-            document.getElementById('crawl-progress-text').textContent = 'Keine URLs vorhanden.';
+            document.getElementById('crawl-progress-text').textContent = 'No URLs available.';
             return;
         }
 
         btn.disabled = true;
         btn.querySelector('.spinner').classList.remove('hidden');
-        document.getElementById('crawl-progress-text').textContent = 'Wird zur Warteschlange hinzugefügt…';
+        document.getElementById('crawl-progress-text').textContent = 'Adding to queue…';
 
         apiPost('crawl-all', {}, function (err, data) {
             btn.disabled = false;
             btn.querySelector('.spinner').classList.add('hidden');
             if (!err && data.success) {
                 document.getElementById('crawl-progress-text').textContent =
-                    data.queued + ' URL(s) in die Warteschlange eingereiht.';
+                    data.queued + ' URL(s) added to queue.';
             } else {
                 document.getElementById('crawl-progress-text').textContent =
-                    'Fehler: ' + (data && data.error ? data.error : 'Unbekannt');
+                    'Error: ' + (data && data.error ? data.error : 'Unknown');
             }
         });
     });
@@ -1104,13 +1104,13 @@
         var wrap = document.getElementById('qa-table-wrap');
         var tbody = document.getElementById('qa-tbody');
         if (!tbody) {
-            wrap.innerHTML = '<div class="tableview"><table class="data fullwidth" id="qa-table"><thead><tr><th style="width:30%">Frage</th><th>Antwort</th><th style="width:80px;text-align:center">Quelle</th><th style="width:80px;text-align:center">Status</th><th style="width:160px">Aktionen</th></tr></thead><tbody id="qa-tbody"></tbody></table></div>';
+            wrap.innerHTML = '<div class="tableview"><table class="data fullwidth" id="qa-table"><thead><tr><th style="width:30%">Question</th><th>Answer</th><th style="width:80px;text-align:center">Source</th><th style="width:80px;text-align:center">Status</th><th style="width:160px">Actions</th></tr></thead><tbody id="qa-tbody"></tbody></table></div>';
             tbody = document.getElementById('qa-tbody');
         }
 
         var srcBadge = source === 'log'
             ? '<span class="qa-source-badge qa-source-log">Log</span>'
-            : '<span class="qa-source-badge qa-source-manual">Manuell</span>';
+            : '<span class="qa-source-badge qa-source-manual">Manual</span>';
 
         var tr = document.createElement('tr');
         tr.dataset.qaId = qaId;
@@ -1118,9 +1118,9 @@
             '<td style="font-size:13px;vertical-align:top;padding-top:10px"><span class="qa-question-text">' + escHtml(question) + '</span></td>' +
             '<td style="font-size:13px;vertical-align:top;padding-top:10px"><span class="qa-answer-text" style="color:#596673">' + escHtml(answer).replace(/\n/g,'<br>') + '</span></td>' +
             '<td style="text-align:center;vertical-align:top;padding-top:10px">' + srcBadge + '</td>' +
-            '<td style="text-align:center;vertical-align:top;padding-top:10px"><button type="button" class="btn-qa-toggle" data-qa-id="' + qaId + '" data-active="1" title="Deaktivieren"><span class="qa-status-indicator" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#27ab83;margin-right:4px"></span>Aktiv</button></td>' +
-            '<td style="vertical-align:top;padding-top:8px"><button type="button" class="btn small btn-qa-edit" data-qa-id="' + qaId + '" data-question="' + escAttr(question) + '" data-answer="' + escAttr(answer) + '">Bearbeiten</button>' +
-            '<button type="button" class="btn small btn-qa-delete" data-qa-id="' + qaId + '" style="margin-left:4px;color:#cf1124">Löschen</button></td>';
+            '<td style="text-align:center;vertical-align:top;padding-top:10px"><button type="button" class="btn-qa-toggle" data-qa-id="' + qaId + '" data-active="1" title="Deactivate"><span class="qa-status-indicator" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#27ab83;margin-right:4px"></span>Active</button></td>' +
+            '<td style="vertical-align:top;padding-top:8px"><button type="button" class="btn small btn-qa-edit" data-qa-id="' + qaId + '" data-question="' + escAttr(question) + '" data-answer="' + escAttr(answer) + '">Edit</button>' +
+            '<button type="button" class="btn small btn-qa-delete" data-qa-id="' + qaId + '" style="margin-left:4px;color:#cf1124">Delete</button></td>';
         tbody.insertBefore(tr, tbody.firstChild);
         attachQaRowEvents(tr);
     }
@@ -1154,13 +1154,13 @@
 
     function handleQaDelete() {
         var qaId = this.dataset.qaId;
-        if (!confirm('Q&A-Paar wirklich löschen?')) return;
+        if (!confirm('Really delete this Q&A pair?')) return;
         var btn = this;
         btn.disabled = true;
         apiPost('delete-qa-pair', { qaId: qaId }, function (err, data) {
             btn.disabled = false;
             if (err || !data.success) {
-                alert('Fehler: ' + (err || data.error));
+                alert('Error: ' + (err || data.error));
             } else {
                 var row = document.querySelector('tr[data-qa-id="' + qaId + '"]');
                 if (row) row.remove();
@@ -1178,13 +1178,13 @@
         apiPost('toggle-qa-pair', { qaId: qaId, active: active ? 0 : 1 }, function (err, data) {
             btn.disabled = false;
             if (err || !data.success) {
-                alert('Fehler: ' + (err || data.error));
+                alert('Error: ' + (err || data.error));
                 return;
             }
             var nowActive  = !active;
             btn.dataset.active = nowActive ? '1' : '0';
-            btn.title      = nowActive ? 'Deaktivieren' : 'Aktivieren';
-            btn.innerHTML  = '<span class="qa-status-indicator" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + (nowActive ? '#27ab83' : '#d0d5dd') + ';margin-right:4px"></span>' + (nowActive ? 'Aktiv' : 'Inaktiv');
+            btn.title      = nowActive ? 'Deactivate' : 'Activate';
+            btn.innerHTML  = '<span class="qa-status-indicator" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + (nowActive ? '#27ab83' : '#d0d5dd') + ';margin-right:4px"></span>' + (nowActive ? 'Active' : 'Inactive');
             var row = document.querySelector('tr[data-qa-id="' + qaId + '"]');
             if (row) row.style.opacity = nowActive ? '' : '0.5';
         });
@@ -1198,16 +1198,16 @@
         var question = document.getElementById('qa-new-question').value.trim();
         var answer   = document.getElementById('qa-new-answer').value.trim();
         if (!question || !answer) {
-            showQaStatus('Bitte Frage und Antwort ausfüllen.', 'error');
+            showQaStatus('Please fill in question and answer.', 'error');
             return;
         }
         var btn = this;
         btn.disabled = true;
-        showQaStatus('Wird gespeichert…', '');
+        showQaStatus('Saving…', '');
         apiPost('save-qa-pair', { question: question, answer: answer, source: 'manual' }, function (err, data) {
             btn.disabled = false;
             if (err || !data.success) {
-                showQaStatus('Fehler: ' + (err || data.error), 'error');
+                showQaStatus('Error: ' + (err || data.error), 'error');
             } else {
                 showQaStatus(data.warning || data.message, data.warning ? 'warn' : 'success');
                 document.getElementById('qa-new-question').value = '';
@@ -1225,16 +1225,16 @@
         var question = document.getElementById('qa-edit-question').value.trim();
         var answer   = document.getElementById('qa-edit-answer').value.trim();
         if (!question || !answer) {
-            document.getElementById('qa-edit-status').textContent = 'Frage und Antwort erforderlich.';
+            document.getElementById('qa-edit-status').textContent = 'Question and answer are required.';
             return;
         }
         var btn = this;
         btn.disabled = true;
-        document.getElementById('qa-edit-status').textContent = 'Wird gespeichert…';
+        document.getElementById('qa-edit-status').textContent = 'Saving…';
         apiPost('save-qa-pair', { id: qaId, question: question, answer: answer }, function (err, data) {
             btn.disabled = false;
             if (err || !data.success) {
-                document.getElementById('qa-edit-status').textContent = 'Fehler: ' + (err || data.error);
+                document.getElementById('qa-edit-status').textContent = 'Error: ' + (err || data.error);
                 return;
             }
             // Update row in table

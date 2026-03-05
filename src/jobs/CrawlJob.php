@@ -16,7 +16,7 @@ class CrawlJob extends BaseJob
         $urlDoc = Chatagent::getInstance()->getVectorService()->getCrawlUrl($this->urlId);
 
         if (!$urlDoc) {
-            Craft::warning("CrawlJob: URL #{$this->urlId} nicht gefunden – Job wird übersprungen.", __METHOD__);
+            Craft::warning("CrawlJob: URL #{$this->urlId} not found – skipping job.", __METHOD__);
             return;
         }
 
@@ -24,11 +24,11 @@ class CrawlJob extends BaseJob
             $result = Chatagent::getInstance()->getCrawlService()->crawlAndIndex($this->urlId, $urlDoc['url']);
             Craft::info(
                 "CrawlJob: URL #{$this->urlId} ({$urlDoc['url']}) – " .
-                ($result['success'] ? $result['chunkCount'] . ' Chunks indexiert.' : 'Fehler: ' . $result['error']),
+                ($result['success'] ? $result['chunkCount'] . ' chunks indexed.' : 'Error: ' . $result['error']),
                 __METHOD__
             );
         } catch (\Throwable $e) {
-            Craft::error("CrawlJob: URL #{$this->urlId} fehlgeschlagen: " . $e->getMessage(), __METHOD__);
+            Craft::error("CrawlJob: URL #{$this->urlId} failed: " . $e->getMessage(), __METHOD__);
             Chatagent::getInstance()->getVectorService()->updateCrawlUrlStatus(
                 $this->urlId, 'error', 0, '', $e->getMessage()
             );
