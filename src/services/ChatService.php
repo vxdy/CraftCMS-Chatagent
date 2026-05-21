@@ -58,7 +58,7 @@ class ChatService extends Component
         $settings = $this->getSettings();
 
         if (empty($settings['openaiApiKey'])) {
-            return ['success' => false, 'error' => 'OpenAI API Key ist nicht konfiguriert.'];
+            return ['success' => false, 'error' => 'OpenAI API key has not been configured.'];
         }
 
         $logService = Chatagent::getInstance()->getLogsService();
@@ -97,13 +97,13 @@ class ChatService extends Component
                     $url    = $meta['url'] ?? '';
                     $title  = $meta['entryTitle'] ?? $meta['title'] ?? '';
                     if ($url && $title) {
-                        $source = "\n[Quelle: {$title} – {$url}]";
+                        $source = "\n[Source: {$title} – {$url}]";
                     } elseif ($url) {
                         $source = "\n[URL: {$url}]";
                     } elseif ($title) {
-                        $source = "\n[Quelle: {$title}]";
+                        $source = "\n[Source: {$title}]";
                     } elseif (!empty($meta['filename'])) {
-                        $source = "\n[Datei: {$meta['filename']}]";
+                        $source = "\n[File: {$meta['filename']}]";
                     }
                     $contextParts[] = $chunk['chunk_text'] . $source;
                 }
@@ -217,15 +217,15 @@ class ChatService extends Component
 
         if ($httpCode < 200 || $httpCode >= 300) {
             Craft::error("OpenAI Chat HTTP {$httpCode}: {$response}", __METHOD__);
-            throw new \RuntimeException("OpenAI API antwortete mit HTTP {$httpCode}.");
+            throw new \RuntimeException("The OpenAI API responded with HTTP {$httpCode}.");
         }
 
         $data    = json_decode($response, true);
         $content = $data['choices'][0]['message']['content'] ?? null;
 
         if ($content === null) {
-            Craft::error("Unerwartete OpenAI Chat-Antwort: {$response}", __METHOD__);
-            throw new \RuntimeException('Unerwartete Antwort von OpenAI Chat API.');
+            Craft::error("Unexpected OpenAI chat response: {$response}", __METHOD__);
+            throw new \RuntimeException('Unexpected response from the OpenAI Chat API.');
         }
 
         return $content;

@@ -130,6 +130,14 @@
     margin: 0;
 }
 
+.chatbot-container.light .chatbot-title {
+    color: var(--chatbot-text-light);
+}
+
+.chatbot-container.dark .chatbot-title {
+    color: var(--chatbot-text-dark);
+}
+
 .chatbot-header-right {
     display: flex;
     gap: 8px;
