@@ -10,6 +10,8 @@ use Twig\TwigFunction;
 
 class ChatbotTwigExtension extends AbstractExtension
 {
+    private static bool $rendered = false;
+
     public function getFunctions(): array
     {
         return [
@@ -19,23 +21,29 @@ class ChatbotTwigExtension extends AbstractExtension
 
     public function renderWidget(): string
     {
+        if (self::$rendered) {
+            return '';
+        }
+
         $settings = Chatagent::getInstance()->getChatService()->getSettings();
 
         if (!$settings['enabled']) {
             return '';
         }
 
+        self::$rendered = true;
+
         $view = Craft::$app->getView();
 
         // Register asset bundle (JS + CSS)
         $view->registerAssetBundle(ChatbotAssetBundle::class);
 
-        // Resolve logo asset URL if set
+        // Resolve logo asset URL via transform so object storage serves it correctly
         $logoUrl = '';
         if (!empty($settings['logoAssetId'])) {
             $asset = Craft::$app->getAssets()->getAssetById((int)$settings['logoAssetId']);
             if ($asset) {
-                $logoUrl = $asset->getUrl() ?? '';
+                $logoUrl = $asset->getUrl(['height' => 60, 'mode' => 'fit']) ?? '';
             }
         }
 

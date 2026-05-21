@@ -20,7 +20,7 @@ class EmbeddingService extends Component
         $model    = $settings['embeddingModel'] ?? 'text-embedding-3-small';
 
         if (empty($apiKey)) {
-            throw new \RuntimeException('OpenAI API Key ist nicht konfiguriert.');
+            throw new \RuntimeException('OpenAI API key has not been configured.');
         }
 
         $payload = json_encode([
@@ -51,15 +51,15 @@ class EmbeddingService extends Component
 
         if ($httpCode < 200 || $httpCode >= 300) {
             Craft::error("OpenAI Embeddings HTTP {$httpCode}: {$response}", __METHOD__);
-            throw new \RuntimeException("OpenAI API antwortete mit HTTP {$httpCode}.");
+            throw new \RuntimeException("OpenAI API responded with HTTP {$httpCode}.");
         }
 
         $data = json_decode($response, true);
         $embedding = $data['data'][0]['embedding'] ?? null;
 
         if (!is_array($embedding)) {
-            Craft::error("Unerwartete OpenAI Embedding-Antwort: {$response}", __METHOD__);
-            throw new \RuntimeException('Unerwartete Antwort von OpenAI Embeddings API.');
+            Craft::error("Unexpected OpenAI embedding response: {$response}", __METHOD__);
+            throw new \RuntimeException('Unexpected response from OpenAIs Embeddings API.');
         }
 
         return $embedding;

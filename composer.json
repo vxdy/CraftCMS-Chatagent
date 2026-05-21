@@ -1,5 +1,6 @@
 {
   "name": "eventiva/craft-chatagent",
+  "version": "1.1.2",
   "description": "Plugin name: Chatagent",
   "type": "craft-plugin",
   "license": "proprietary",
@@ -27,7 +28,7 @@
     "handle": "chatagent",
     "name": "Chatagent",
     "developer": "Eventiva",
-    "documentationUrl": "https://github.com/vxdy/craftcms-chatagent.git",
+    "documentationUrl": "https://github.com/eventiva-solutions/CraftCMS-Chatagent/blob/master/README.md",
     "class": "eventiva\\craftchatagent\\Chatagent"
   },
   "scripts": {

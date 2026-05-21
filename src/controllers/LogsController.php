@@ -96,6 +96,39 @@ class LogsController extends Controller
     }
 
     /**
+     * POST chatagent/logs/delete-before
+     */
+    public function actionDeleteBefore(): \yii\web\Response
+    {
+        $this->requirePostRequest();
+
+        $date = Craft::$app->getRequest()->getBodyParam('beforeDate', '');
+
+        if (!$date || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+            Craft::$app->getSession()->setError(Craft::t('chatagent', 'Invalid date.'));
+            return $this->redirect('chatagent/logs');
+        }
+
+        $count = Chatagent::getInstance()->getLogsService()->deleteSessionsBefore($date);
+        Craft::$app->getSession()->setNotice(Craft::t('chatagent', '{n} session(s) deleted.', ['n' => $count]));
+
+        return $this->redirect('chatagent/logs');
+    }
+
+    /**
+     * POST chatagent/logs/delete-all
+     */
+    public function actionDeleteAll(): \yii\web\Response
+    {
+        $this->requirePostRequest();
+
+        $count = Chatagent::getInstance()->getLogsService()->deleteAllSessions();
+        Craft::$app->getSession()->setNotice(Craft::t('chatagent', '{n} session(s) deleted.', ['n' => $count]));
+
+        return $this->redirect('chatagent/logs');
+    }
+
+    /**
      * GET chatagent/settings
      */
     public function actionSettings(): \yii\web\Response
@@ -172,6 +205,8 @@ class LogsController extends Controller
             'suggestions'        => $suggestions,
             'maxContextChunks'   => (int)$request->getBodyParam('maxContextChunks', 5),
             'minSimilarityScore' => (float)$request->getBodyParam('minSimilarityScore', 0.65),
+            'websiteUrl'         => $request->getBodyParam('websiteUrl', ''),
+            'companyDescription' => $request->getBodyParam('companyDescription', ''),
         ];
 
         if (Chatagent::getInstance()->getChatService()->saveSettings($settings)) {

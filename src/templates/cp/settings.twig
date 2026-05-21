@@ -13,6 +13,7 @@
 
         <nav class="custom-tabs" style="display:flex; border-bottom: 2px solid #e3e5e8; margin-bottom: 24px; gap: 0;">
             <button type="button" class="custom-tab sel" data-target="tab-general">{{ "General"|t('chatagent') }}</button>
+            <button type="button" class="custom-tab" data-target="tab-company">{{ "Company"|t('chatagent') }}</button>
             <button type="button" class="custom-tab" data-target="tab-ai">{{ "AI Configuration"|t('chatagent') }}</button>
             <button type="button" class="custom-tab" data-target="tab-training">{{ "Training"|t('chatagent') }}</button>
             <button type="button" class="custom-tab" data-target="tab-suggestions">{{ "Suggestions"|t('chatagent') }}</button>
@@ -37,14 +38,6 @@
 
             <hr>
             <h2>{{ "Appearance"|t('chatagent') }}</h2>
-
-            {{ forms.textField({
-                label: "Company Name (label)"|t('chatagent'),
-                instructions: "Displayed in the chat window header."|t('chatagent'),
-                id: 'companyName',
-                name: 'companyName',
-                value: settings.companyName,
-            }) }}
 
             {{ forms.textField({
                 label: "Logo Text (label)"|t('chatagent'),
@@ -112,6 +105,42 @@
             }) }}
 
         </div>{# /tab-general #}
+
+        {# ── Tab: Company / Website ────────────────────────────── #}
+        <div id="tab-company" class="hidden">
+
+            <p style="color: #596673; margin-bottom: 24px;">{{ "This information is automatically added to the top of the system prompt so the AI understands the context of your company and website."|t('chatagent') }}</p>
+
+            {{ forms.textField({
+                label: "Company Name"|t('chatagent'),
+                instructions: "The name of your company or brand."|t('chatagent'),
+                id: 'companyName',
+                name: 'companyName',
+                value: settings.companyName,
+                placeholder: 'e.g. Acme Inc.',
+            }) }}
+
+            {{ forms.textField({
+                label: "Website URL"|t('chatagent'),
+                instructions: "The main URL of your website."|t('chatagent'),
+                id: 'websiteUrl',
+                name: 'websiteUrl',
+                value: settings.websiteUrl,
+                type: 'url',
+                placeholder: 'https://www.example.com',
+            }) }}
+
+            {{ forms.textareaField({
+                label: "About the Company / Website"|t('chatagent'),
+                instructions: "A short description of what your company does, what products or services you offer, and who your target audience is. The AI uses this as background context for every conversation."|t('chatagent'),
+                id: 'companyDescription',
+                name: 'companyDescription',
+                value: settings.companyDescription,
+                rows: 6,
+                placeholder: "e.g. We are an event technology company specialising in lighting, sound and stage equipment for corporate events and concerts. Our customers are event agencies and large companies across Germany.",
+            }) }}
+
+        </div>{# /tab-company #}
 
         {# ── Tab: AI Configuration ─────────────────────────────── #}
         <div id="tab-ai" class="hidden">
@@ -284,7 +313,7 @@
                 <div class="input">
                     <textarea id="suggestions" name="suggestions" rows="10"
                               class="nicetext code fullwidth"
-                              style="border: 1px solid #d0d5dd; border-radius: 4px;">{{ settings.suggestions | default([]) | join('\n') }}</textarea>
+                              style="border: 1px solid #d0d5dd; border-radius: 4px;">{{ settings.suggestions | default([]) | join("\n") }}</textarea>
                 </div>
             </div>
 
@@ -331,7 +360,7 @@
 <script>
 (function () {
     var tabs   = document.querySelectorAll('.custom-tab');
-    var panels = ['tab-general', 'tab-ai', 'tab-training', 'tab-suggestions', 'tab-logging'];
+    var panels = ['tab-general', 'tab-company', 'tab-ai', 'tab-training', 'tab-suggestions', 'tab-logging'];
 
     tabs.forEach(function(btn) {
         btn.addEventListener('click', function() {

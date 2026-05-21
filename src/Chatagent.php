@@ -64,9 +64,19 @@ class Chatagent extends Plugin
             'crawl'     => CrawlService::class,
         ]);
 
-        // Register Twig extension (web requests only)
+        // Register Twig extension and auto-inject widget (web frontend requests only)
         if (!Craft::$app->getRequest()->getIsConsoleRequest()) {
             Craft::$app->getView()->registerTwigExtension(new ChatbotTwigExtension());
+
+            if (!Craft::$app->getRequest()->getIsCpRequest()) {
+                Event::on(
+                    View::class,
+                    View::EVENT_END_BODY,
+                    function() {
+                        echo (new ChatbotTwigExtension())->renderWidget();
+                    }
+                );
+            }
         }
 
         $this->registerTemplateRoots();
@@ -125,6 +135,11 @@ class Chatagent extends Plugin
         return $this->get('crawl');
     }
 
+    protected function createSettingsModel(): ?Model
+    {
+        return new Settings();
+    }
+
     protected function settingsHtml(): ?string
     {
         return Craft::$app->view->renderTemplate('chatbot/_settings.twig', [
@@ -164,6 +179,8 @@ class Chatagent extends Plugin
                     'chatagent/logs'                              => 'chatagent/logs/index',
                     'chatagent/logs/<id:\d+>'                     => 'chatagent/logs/session',
                     'chatagent/logs/delete'                       => 'chatagent/logs/delete',
+                    'chatagent/logs/delete-before'                => 'chatagent/logs/delete-before',
+                    'chatagent/logs/delete-all'                   => 'chatagent/logs/delete-all',
                     'chatagent/settings'                          => 'chatagent/logs/settings',
                     'chatagent/settings/save'                     => 'chatagent/logs/save-settings',
                     'chatagent/training'                          => 'chatagent/training/index',
