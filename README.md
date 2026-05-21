@@ -132,6 +132,15 @@ Browse all chat sessions in a filterable, paginated table.
 - Color-coded confidence badge
 - IP address and timestamp
 
+### Bulk Delete
+
+At the bottom of the logs page, two bulk delete options are available:
+
+- **Delete before date** - select a date and delete all sessions up to and including that day
+- **Delete all sessions** - remove the entire log history at once
+
+Both actions require confirmation and cannot be undone.
+
 ### Session Detail View
 
 Click any session to see the full conversation.
@@ -208,12 +217,21 @@ All settings are under **Chatbot → Settings**, organized in tabs.
 | Setting | Description |
 |---------|-------------|
 | Enable Chatbot | Show or hide the widget on the frontend |
-| Company Name | Displayed in the chat header |
 | Logo Text | Up to 3 characters, shown as a badge if no logo image is set |
 | Logo Image | Square image (min 80×80 px) used as the chat avatar |
 | Primary Color | Color for buttons and user message bubbles |
 | Logo Background Color | Background color behind the logo in the chat header |
 | Default Theme | Start in Light or Dark mode |
+
+### Company
+
+| Setting | Description |
+|---------|-------------|
+| Company Name | Displayed in the chat header |
+| Website URL | The main URL of your website |
+| About the Company / Website | Short description of what your company does, its products/services, and target audience |
+
+> Company name, website URL, and description are automatically prepended as a context block to the system prompt so the AI understands who it is representing.
 
 ### AI Configuration
 
@@ -223,11 +241,15 @@ All settings are under **Chatbot → Settings**, organized in tabs.
 | Chat Model | `gpt-4o-mini` (recommended), `gpt-4o`, or `gpt-3.5-turbo` |
 | Embedding Model | `text-embedding-3-small` (recommended), `-large`, or `ada-002` |
 | Initial Message | The bot's first greeting when the chat opens |
-| System Prompt | Full instructions / persona for the AI - define tone, language, scope, restrictions |
+| System Prompt | Full instructions / persona for the AI - define tone, language, scope, restrictions. Pre-filled with a sensible default on first use - edit and save it here in the backend. |
 | Max Context Chunks | How many matching text chunks are passed as context (1–20, default 5) |
 | Min Similarity Score | Minimum relevance threshold for context retrieval (0.00–1.00, default 0.65) |
 
 > **Note:** Switching the embedding model requires full retraining of all content.
+
+#### Default System Prompt
+
+On a fresh install, the System Prompt field is pre-filled with the contents of `default-prompt.md` (included in the plugin). This gives users a working starting point without having to write a prompt from scratch. Once saved in the backend, the stored value is used exclusively - the file is no longer consulted.
 
 ### Training
 
