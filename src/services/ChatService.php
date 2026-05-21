@@ -36,6 +36,8 @@ class ChatService extends Component
             'minSimilarityScore' => $s->minSimilarityScore,
             'websiteUrl'         => $s->websiteUrl,
             'companyDescription' => $s->companyDescription,
+            'inputPlaceholder'   => $s->inputPlaceholder,
+            'sendButtonText'     => $s->sendButtonText,
             'enableRatings'      => $s->enableRatings,
             'suggestionsEnabled' => $s->suggestionsEnabled,
             'suggestions'        => $s->suggestions,

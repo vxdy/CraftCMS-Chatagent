@@ -40,7 +40,7 @@ No template changes are required. Once enabled, the widget is automatically inje
 - **Queue Manager Support** - background processing, no UI blocking
 - **Custom System Prompt** - full control over AI persona and behavior
 - **Light / Dark Mode** toggle in the chat widget
-- **Full Customization** - colors, logo, company name, greeting, preset questions
+- **Full Customization** - colors, logo, company name, greeting, input placeholder, send button text, preset questions
 - **Log Color Grading** - confidence levels highlighted at a glance
 
 ---
@@ -230,6 +230,8 @@ All settings are under **Chatbot → Settings**, organized in tabs.
 | Primary Color | Color for buttons and user message bubbles |
 | Logo Background Color | Background color behind the logo in the chat header |
 | Default Theme | Start in Light or Dark mode |
+| Input Placeholder | Placeholder text inside the message input field (default: `Your message...`) |
+| Send Button Text | Label on the send button (default: `Send`) |
 
 ### Company
 

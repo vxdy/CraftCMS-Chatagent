@@ -207,6 +207,8 @@ class LogsController extends Controller
             'minSimilarityScore' => (float)$request->getBodyParam('minSimilarityScore', 0.65),
             'websiteUrl'         => $request->getBodyParam('websiteUrl', ''),
             'companyDescription' => $request->getBodyParam('companyDescription', ''),
+            'inputPlaceholder'   => $request->getBodyParam('inputPlaceholder', 'Your message...'),
+            'sendButtonText'     => $request->getBodyParam('sendButtonText', 'Send'),
         ];
 
         if (Chatagent::getInstance()->getChatService()->saveSettings($settings)) {

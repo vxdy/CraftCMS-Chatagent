@@ -32,6 +32,10 @@ class Settings extends Model
     public string $websiteUrl = '';
     public string $companyDescription = '';
 
+    // Widget UI labels
+    public string $inputPlaceholder = 'Your message...';
+    public string $sendButtonText = 'Send';
+
     // Rating & Suggestions
     public bool $enableRatings = true;
     public bool $suggestionsEnabled = true;
@@ -40,7 +44,7 @@ class Settings extends Model
     public function rules(): array
     {
         return [
-            [['companyName', 'logoText', 'primaryColor', 'logoBgColor', 'initialMessage', 'defaultTheme', 'systemPrompt', 'openaiApiKey', 'openaiModel', 'embeddingModel'], 'string'],
+            [['companyName', 'logoText', 'primaryColor', 'logoBgColor', 'initialMessage', 'defaultTheme', 'systemPrompt', 'openaiApiKey', 'openaiModel', 'embeddingModel', 'inputPlaceholder', 'sendButtonText'], 'string'],
             [['enabled', 'logConversations', 'autoTrainOnSave', 'enableRatings', 'suggestionsEnabled'], 'boolean'],
             [['logRetentionDays', 'maxContextChunks', 'logoAssetId'], 'integer', 'min' => 0],
             [['minSimilarityScore'], 'number', 'min' => 0, 'max' => 1],
@@ -70,6 +74,8 @@ class Settings extends Model
             'minSimilarityScore' => Craft::t('chatagent', 'Min. Similarity Score'),
             'websiteUrl'         => Craft::t('chatagent', 'Website URL'),
             'companyDescription' => Craft::t('chatagent', 'About the Company / Website'),
+            'inputPlaceholder'   => Craft::t('chatagent', 'Input Placeholder'),
+            'sendButtonText'     => Craft::t('chatagent', 'Send Button Text'),
             'enableRatings'      => Craft::t('chatagent', 'Enable Ratings'),
             'suggestionsEnabled' => Craft::t('chatagent', 'Enable Suggestions'),
             'suggestions'        => Craft::t('chatagent', 'Suggestions'),

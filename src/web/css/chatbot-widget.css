@@ -131,11 +131,11 @@
 }
 
 .chatbot-container.light .chatbot-title {
-    color: var(--chatbot-text-light);
+    color: var(--chatbot-text-light) !important;
 }
 
 .chatbot-container.dark .chatbot-title {
-    color: var(--chatbot-text-dark);
+    color: var(--chatbot-text-dark) !important;
 }
 
 .chatbot-header-right {

@@ -1,5 +1,18 @@
 # Release Notes for Chatagent
 
+## 1.2.0 - 2026-05-21
+
+### Added
+- **Widget Label Customization** – Input placeholder and send button text are now configurable per-install under Settings → General → Widget Labels. Defaults are `"Your message..."` and `"Send"`.
+
+### Changed
+- All hardcoded German strings removed from the chat widget JS (button tooltips, error messages). The widget is now fully English by default with user-configurable labels for input and send button.
+
+### Fixed
+- Company name title color rules now use `!important` to reliably prevent site-level heading styles from bleeding into the widget.
+
+---
+
 ## 1.1.2 - 2026-05-21
 
 ### Fixed
@@ -15,7 +28,7 @@
 - Double-render guard: if `{{ chatbotWidget() }}` is already called in a template, the auto-injection is skipped automatically.
 
 ### Changed
-- Widget is now **disabled by default** on fresh installs. Enable it explicitly under Chatbot → Settings → General.
+- Widget is now **disabled by default** on fresh installations. Enable it explicitly under Chatbot → Settings → General.
 
 ---
 

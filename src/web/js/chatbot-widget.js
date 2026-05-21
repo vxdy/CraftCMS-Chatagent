@@ -17,6 +17,8 @@ class ChatbotWidget {
             logoUrl: config.logoUrl || '',
             primaryColor: config.primaryColor || '#7C3AED',
             defaultTheme: config.defaultTheme || 'light',
+            inputPlaceholder: config.inputPlaceholder || 'Your message...',
+            sendButtonText: config.sendButtonText || 'Send',
             enableRatings: config.enableRatings !== undefined ? config.enableRatings : true,
             suggestionsEnabled: config.suggestionsEnabled !== undefined ? config.suggestionsEnabled : true,
             suggestions: Array.isArray(config.suggestions) ? config.suggestions.filter(function(s) { return s && s.trim(); }) : [],
@@ -66,13 +68,13 @@ class ChatbotWidget {
                         <h3 class="chatbot-title">${this.config.companyName}</h3>
                     </div>
                     <div class="chatbot-header-right">
-                        <button class="chatbot-icon-btn" id="chatbot-refresh-btn" title="Neues Gespräch">
+                        <button class="chatbot-icon-btn" id="chatbot-refresh-btn" title="New conversation">
                             <i class="fas fa-sync-alt"></i>
                         </button>
-                        <button class="chatbot-icon-btn" id="chatbot-theme-btn" title="Theme wechseln">
+                        <button class="chatbot-icon-btn" id="chatbot-theme-btn" title="Toggle theme">
                             <i class="fas fa-${this.config.defaultTheme === 'dark' ? 'sun' : 'moon'}"></i>
                         </button>
-                        <button class="chatbot-icon-btn" id="chatbot-close-btn" title="Schließen">
+                        <button class="chatbot-icon-btn" id="chatbot-close-btn" title="Close">
                             ✕
                         </button>
                     </div>
@@ -94,11 +96,11 @@ class ChatbotWidget {
                             type="text"
                             class="chatbot-input"
                             id="chatbot-input"
-                            placeholder="Ihre Nachricht..."
+                            placeholder="${this.config.inputPlaceholder}"
                             autocomplete="off"
                         />
                         <button class="chatbot-send-btn" id="chatbot-send-btn">
-                            Senden
+                            ${this.config.sendButtonText}
                         </button>
                     </div>
                 </div>
@@ -429,15 +431,15 @@ class ChatbotWidget {
                 this.addMessage(data[0].output, 'bot', data[0].messageId || null);
             } else if (data.error) {
                 console.error('Chatbot server error:', data.error, data);
-                this.addMessage('Fehler: ' + data.error, 'bot');
+                this.addMessage('Error: ' + data.error, 'bot');
             } else {
-                this.addMessage('Entschuldigung, ich habe eine unerwartete Antwort erhalten.', 'bot');
+                this.addMessage('Sorry, an unexpected response was received.', 'bot');
             }
 
         } catch (error) {
             console.error('Chatbot error:', error);
             this.hideLoading();
-            this.addMessage('Entschuldigung, es gab einen Fehler. Bitte versuchen Sie es erneut.', 'bot');
+            this.addMessage('Sorry, something went wrong. Please try again.', 'bot');
         }
     }
 

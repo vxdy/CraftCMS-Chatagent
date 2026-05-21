@@ -18,6 +18,8 @@ var ChatbotConfig = {
     primaryColor: {{ settings.primaryColor | json_encode | raw }},
     initialMessage: {{ settings.initialMessage | json_encode | raw }},
     defaultTheme: {{ settings.defaultTheme | json_encode | raw }},
+    inputPlaceholder: {{ settings.inputPlaceholder | default('Your message...') | json_encode | raw }},
+    sendButtonText: {{ settings.sendButtonText | default('Send') | json_encode | raw }},
     enableRatings: {{ settings.enableRatings ? 'true' : 'false' }},
     suggestionsEnabled: {{ settings.suggestionsEnabled ?? true ? 'true' : 'false' }},
     suggestions: {{ settings.suggestions | default([]) | json_encode | raw }}

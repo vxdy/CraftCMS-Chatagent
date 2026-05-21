@@ -104,6 +104,27 @@
                 ],
             }) }}
 
+            <hr>
+            <h2>{{ "Widget Labels"|t('chatagent') }}</h2>
+
+            {{ forms.textField({
+                label: "Input Placeholder"|t('chatagent'),
+                instructions: "Placeholder text shown inside the message input field."|t('chatagent'),
+                id: 'inputPlaceholder',
+                name: 'inputPlaceholder',
+                value: settings.inputPlaceholder,
+                placeholder: 'Your message...',
+            }) }}
+
+            {{ forms.textField({
+                label: "Send Button Text"|t('chatagent'),
+                instructions: "Label on the send button."|t('chatagent'),
+                id: 'sendButtonText',
+                name: 'sendButtonText',
+                value: settings.sendButtonText,
+                placeholder: 'Send',
+            }) }}
+
         </div>{# /tab-general #}
 
         {# ── Tab: Company / Website ────────────────────────────── #}
