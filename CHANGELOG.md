@@ -1,5 +1,16 @@
 # Release Notes for Chatagent
 
+## 1.1.1 - 2026-05-21
+
+### Added
+- Chat widget is now automatically injected before `</body>` on all frontend pages when enabled - no template changes required.
+- Double-render guard: if `{{ chatbotWidget() }}` is already called in a template, the auto-injection is skipped automatically.
+
+### Changed
+- Widget is now **disabled by default** on fresh installs. Enable it explicitly under Chatbot → Settings → General.
+
+---
+
 ## 1.1.0 - 2026-05-21
 
 ### Added

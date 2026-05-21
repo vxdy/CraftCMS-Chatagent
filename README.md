@@ -18,6 +18,14 @@
 
 Go to the Plugin Store in your project's Control Panel and search for **"ChatAgent"**. Then press **Install**.
 
+#### Setup
+
+After installation, go to **Chatbot → Settings → General** and enable the chatbot. The widget is **disabled by default** and will not appear on the frontend until you toggle it on.
+
+No template changes are required. Once enabled, the widget is automatically injected before `</body>` on every frontend page.
+
+> If you prefer manual placement (e.g. only on specific pages), add `{{ chatbotWidget() }}` to your template. The plugin detects this and will not inject the widget a second time.
+
 ---
 
 ## Features at a Glance

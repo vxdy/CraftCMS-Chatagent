@@ -16,7 +16,7 @@ class Settings extends Model
     public string $defaultTheme = 'light';
     public string $systemPrompt = '';
     public string $openaiApiKey = '';
-    public bool $enabled = true;
+    public bool $enabled = false;
     public bool $logConversations = true;
     public int $logRetentionDays = 90;
 

@@ -10,6 +10,8 @@ use Twig\TwigFunction;
 
 class ChatbotTwigExtension extends AbstractExtension
 {
+    private static bool $rendered = false;
+
     public function getFunctions(): array
     {
         return [
@@ -19,11 +21,17 @@ class ChatbotTwigExtension extends AbstractExtension
 
     public function renderWidget(): string
     {
+        if (self::$rendered) {
+            return '';
+        }
+
         $settings = Chatagent::getInstance()->getChatService()->getSettings();
 
         if (!$settings['enabled']) {
             return '';
         }
+
+        self::$rendered = true;
 
         $view = Craft::$app->getView();
 

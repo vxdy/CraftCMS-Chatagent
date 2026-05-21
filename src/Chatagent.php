@@ -64,9 +64,19 @@ class Chatagent extends Plugin
             'crawl'     => CrawlService::class,
         ]);
 
-        // Register Twig extension (web requests only)
+        // Register Twig extension and auto-inject widget (web frontend requests only)
         if (!Craft::$app->getRequest()->getIsConsoleRequest()) {
             Craft::$app->getView()->registerTwigExtension(new ChatbotTwigExtension());
+
+            if (!Craft::$app->getRequest()->getIsCpRequest()) {
+                Event::on(
+                    View::class,
+                    View::EVENT_END_BODY,
+                    function() {
+                        echo (new ChatbotTwigExtension())->renderWidget();
+                    }
+                );
+            }
         }
 
         $this->registerTemplateRoots();
