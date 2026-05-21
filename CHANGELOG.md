@@ -1,5 +1,13 @@
 # Release Notes for Chatagent
 
+## 1.1.2 - 2026-05-21
+
+### Fixed
+- Default theme not applied on page load. Theme class is now set directly from config when the widget HTML is created instead of being corrected after the fact.
+- Company name displayed in white in light mode due to site-level `h3` styles bleeding into the widget. Explicit theme-aware colors applied.
+
+---
+
 ## 1.1.1 - 2026-05-21
 
 ### Added

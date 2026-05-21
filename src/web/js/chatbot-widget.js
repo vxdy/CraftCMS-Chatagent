@@ -55,7 +55,7 @@ class ChatbotWidget {
                 <i class="fas fa-comments"></i>
             </button>
 
-            <div class="chatbot-container light hidden" id="chatbot-container">
+            <div class="chatbot-container ${this.config.defaultTheme} hidden" id="chatbot-container">
                 <div class="chatbot-header">
                     <div class="chatbot-header-left">
                         <div class="chatbot-logo">
@@ -70,7 +70,7 @@ class ChatbotWidget {
                             <i class="fas fa-sync-alt"></i>
                         </button>
                         <button class="chatbot-icon-btn" id="chatbot-theme-btn" title="Theme wechseln">
-                            <i class="fas fa-moon"></i>
+                            <i class="fas fa-${this.config.defaultTheme === 'dark' ? 'sun' : 'moon'}"></i>
                         </button>
                         <button class="chatbot-icon-btn" id="chatbot-close-btn" title="Schließen">
                             ✕
@@ -469,14 +469,12 @@ class ChatbotWidget {
 
     loadThemePreference() {
         const savedTheme = sessionStorage.getItem('chatbot_widget_theme');
-        const theme = savedTheme || this.config.defaultTheme;
+        if (!savedTheme) return;
 
-        if (theme === 'dark') {
-            this.isDarkMode = true;
-            this.elements.container.classList.remove('light');
-            this.elements.container.classList.add('dark');
-            this.elements.themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
-        }
+        this.isDarkMode = savedTheme === 'dark';
+        this.elements.container.classList.remove('light', 'dark');
+        this.elements.container.classList.add(savedTheme);
+        this.elements.themeBtn.innerHTML = `<i class="fas fa-${this.isDarkMode ? 'sun' : 'moon'}"></i>`;
     }
 }
 
