@@ -8,52 +8,46 @@ use yii\base\Component;
 
 class ChatService extends Component
 {
-    private const SETTINGS_KEY = 'chatbot_settings';
-
     /**
-     * Get settings from cache or defaults.
+     * Get settings from the plugin settings model (persisted in craft_plugins DB table).
      */
     public function getSettings(): array
     {
-        $defaults = [
-            'companyName'        => 'AMR Eventtechnik',
-            'logoText'           => 'AMR',
-            'logoAssetId'        => 0,
-            'primaryColor'       => '#7C3AED',
-            'logoBgColor'        => '#7C3AED',
-            'initialMessage'     => 'Hey, wie kann ich Ihnen helfen?',
-            'defaultTheme'       => 'light',
-            'enabled'            => true,
-            'logConversations'   => true,
-            'logRetentionDays'   => 90,
-            'systemPrompt'       => '',
-            'openaiApiKey'       => '',
-            'openaiModel'        => 'gpt-4o-mini',
-            'embeddingModel'     => 'text-embedding-3-small',
-            'trainingSections'   => [],
-            'autoTrainOnSave'    => false,
-            'maxContextChunks'   => 5,
-            'minSimilarityScore' => 0.4,
-            'enableRatings'      => true,
-            'suggestionsEnabled' => true,
-            'suggestions'        => [],
+        $s = Chatagent::getInstance()->getSettings();
+
+        return [
+            'companyName'        => $s->companyName,
+            'logoText'           => $s->logoText,
+            'logoAssetId'        => $s->logoAssetId,
+            'primaryColor'       => $s->primaryColor,
+            'logoBgColor'        => $s->logoBgColor,
+            'initialMessage'     => $s->initialMessage,
+            'defaultTheme'       => $s->defaultTheme,
+            'enabled'            => $s->enabled,
+            'logConversations'   => $s->logConversations,
+            'logRetentionDays'   => $s->logRetentionDays,
+            'systemPrompt'       => $s->systemPrompt !== '' ? $s->systemPrompt : $this->loadDefaultPrompt(),
+            'openaiApiKey'       => $s->openaiApiKey,
+            'openaiModel'        => $s->openaiModel,
+            'embeddingModel'     => $s->embeddingModel,
+            'trainingSections'   => $s->trainingSections,
+            'autoTrainOnSave'    => $s->autoTrainOnSave,
+            'maxContextChunks'   => $s->maxContextChunks,
+            'minSimilarityScore' => $s->minSimilarityScore,
+            'websiteUrl'         => $s->websiteUrl,
+            'companyDescription' => $s->companyDescription,
+            'enableRatings'      => $s->enableRatings,
+            'suggestionsEnabled' => $s->suggestionsEnabled,
+            'suggestions'        => $s->suggestions,
         ];
-
-        $saved = Craft::$app->getCache()->get(self::SETTINGS_KEY);
-
-        if (!$saved) {
-            return $defaults;
-        }
-
-        return array_merge($defaults, $saved);
     }
 
     /**
-     * Save settings to cache.
+     * Save settings persistently via Craft's plugin settings (craft_plugins table).
      */
     public function saveSettings(array $settings): bool
     {
-        return Craft::$app->getCache()->set(self::SETTINGS_KEY, $settings, 0);
+        return Craft::$app->getPlugins()->savePluginSettings(Chatagent::getInstance(), $settings);
     }
 
     /**
@@ -117,7 +111,17 @@ class ChatService extends Component
             }
 
             // 4. Build system prompt
-            $baseSystemPrompt = $settings['systemPrompt'] ?: 'You are a friendly assistant. Answer questions helpfully and concisely.';
+            $baseSystemPrompt = $settings['systemPrompt'];
+
+            $companyLines = [];
+            if (!empty($settings['companyName']))        $companyLines[] = 'Company: ' . $settings['companyName'];
+            if (!empty($settings['websiteUrl']))         $companyLines[] = 'Website: ' . $settings['websiteUrl'];
+            if (!empty($settings['companyDescription'])) $companyLines[] = 'About: '   . $settings['companyDescription'];
+
+            if (!empty($companyLines)) {
+                $baseSystemPrompt = "### Company / Website Context\n" . implode("\n", $companyLines) . "\n\n" . $baseSystemPrompt;
+            }
+
             $systemPrompt = $baseSystemPrompt;
             if ($contextText !== '') {
                 $systemPrompt .= "\n\nUse the following information from the knowledge base to answer the user's question:\n\n" . $contextText;
@@ -166,6 +170,17 @@ class ChatService extends Component
             'allScores'  => $vectorService->lastDebugScores ?? [],
             'minScore'   => (float)($settings['minSimilarityScore'] ?? 0.3),
         ]];
+    }
+
+    private function loadDefaultPrompt(): string
+    {
+        $file = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'default-prompt.md';
+
+        if (is_file($file)) {
+            return trim(file_get_contents($file));
+        }
+
+        return 'You are a helpful assistant. Answer questions clearly and concisely.';
     }
 
     /**

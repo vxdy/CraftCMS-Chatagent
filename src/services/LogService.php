@@ -336,6 +336,40 @@ class LogService extends Component
     }
 
     /**
+     * Delete all sessions before a given date (messages cascade via FK).
+     */
+    public function deleteSessionsBefore(string $beforeDate): int
+    {
+        $cutoff = $beforeDate . ' 23:59:59';
+
+        $ids = (new \yii\db\Query())
+            ->select('id')
+            ->from('{{%chatbot_sessions}}')
+            ->where(['<=', 'dateCreated', $cutoff])
+            ->column();
+
+        if (empty($ids)) {
+            return 0;
+        }
+
+        return (int)Craft::$app->getDb()->createCommand()
+            ->delete('{{%chatbot_sessions}}', ['id' => $ids])
+            ->execute();
+    }
+
+    /**
+     * Delete all sessions and messages.
+     */
+    public function deleteAllSessions(): int
+    {
+        $count = (int)(new \yii\db\Query())->from('{{%chatbot_sessions}}')->count();
+
+        Craft::$app->getDb()->createCommand()->delete('{{%chatbot_sessions}}')->execute();
+
+        return $count;
+    }
+
+    /**
      * Delete sessions older than $days days.
      */
     public function pruneOldSessions(int $days): int

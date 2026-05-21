@@ -157,6 +157,37 @@
 
 </div>
 
+<hr style="margin: 32px 0 24px">
+
+<div style="display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start">
+
+    <div>
+        <h3 style="margin: 0 0 10px; font-size: 13px; font-weight: 600; color: #3f4d5a;">{{ "Delete by date range"|t('chatagent') }}</h3>
+        <form method="post" style="display: flex; gap: 8px; align-items: center"
+              onsubmit="return confirm('{{ "Delete all sessions up to and including this date?"|t('chatagent') }}')">
+            {{ csrfInput() }}
+            <input type="hidden" name="action" value="chatagent/logs/delete-before">
+            <label style="font-size: 13px; color: #596673;">{{ "Before:"|t('chatagent') }}</label>
+            <input type="date" name="beforeDate" required
+                   class="text"
+                   style="padding: 5px 8px; font-size: 13px;"
+                   max="{{ now | date('Y-m-d') }}">
+            <button type="submit" class="btn small">{{ "Delete"|t('chatagent') }}</button>
+        </form>
+    </div>
+
+    <div>
+        <h3 style="margin: 0 0 10px; font-size: 13px; font-weight: 600; color: #3f4d5a;">{{ "Delete all sessions"|t('chatagent') }}</h3>
+        <form method="post"
+              onsubmit="return confirm('{{ "Really delete ALL sessions? This cannot be undone."|t('chatagent') }}')">
+            {{ csrfInput() }}
+            <input type="hidden" name="action" value="chatagent/logs/delete-all">
+            <button type="submit" class="btn small">{{ "Delete all"|t('chatagent') }}</button>
+        </form>
+    </div>
+
+</div>
+
 <style>
 .conf-badge {
     display: inline-block;
