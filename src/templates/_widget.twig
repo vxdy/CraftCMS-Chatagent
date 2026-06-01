@@ -22,6 +22,13 @@ var ChatbotConfig = {
     sendButtonText: {{ settings.sendButtonText | default('Send') | json_encode | raw }},
     enableRatings: {{ settings.enableRatings ? 'true' : 'false' }},
     suggestionsEnabled: {{ settings.suggestionsEnabled ?? true ? 'true' : 'false' }},
-    suggestions: {{ settings.suggestions | default([]) | json_encode | raw }}
+    suggestions: {{ settings.suggestions | default([]) | json_encode | raw }},
+    iconChat: {{ settings.iconChat | default('fas fa-comments') | json_encode | raw }},
+    iconThumbUp: {{ settings.iconThumbUp | default('fas fa-thumbs-up') | json_encode | raw }},
+    iconThumbDown: {{ settings.iconThumbDown | default('fas fa-thumbs-down') | json_encode | raw }},
+    iconClose: {{ settings.iconClose | default('fas fa-times') | json_encode | raw }},
+    iconNewChat: {{ settings.iconNewChat | default('fas fa-sync-alt') | json_encode | raw }},
+    iconThemeLight: {{ settings.iconThemeLight | default('fas fa-moon') | json_encode | raw }},
+    iconThemeDark: {{ settings.iconThemeDark | default('fas fa-sun') | json_encode | raw }}
 };
 </script>

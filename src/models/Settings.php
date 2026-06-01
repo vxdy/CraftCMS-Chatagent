@@ -36,6 +36,15 @@ class Settings extends Model
     public string $inputPlaceholder = 'Your message...';
     public string $sendButtonText = 'Send';
 
+    // Widget icons (full CSS class string, e.g. "fas fa-comments" or "bi bi-chat")
+    public string $iconChat = 'fas fa-comments';
+    public string $iconThumbUp = 'fas fa-thumbs-up';
+    public string $iconThumbDown = 'fas fa-thumbs-down';
+    public string $iconClose = 'fas fa-times';
+    public string $iconNewChat = 'fas fa-sync-alt';
+    public string $iconThemeLight = 'fas fa-moon';
+    public string $iconThemeDark = 'fas fa-sun';
+
     // Rating & Suggestions
     public bool $enableRatings = true;
     public bool $suggestionsEnabled = true;
@@ -44,7 +53,7 @@ class Settings extends Model
     public function rules(): array
     {
         return [
-            [['companyName', 'logoText', 'primaryColor', 'logoBgColor', 'initialMessage', 'defaultTheme', 'systemPrompt', 'openaiApiKey', 'openaiModel', 'embeddingModel', 'inputPlaceholder', 'sendButtonText'], 'string'],
+            [['companyName', 'logoText', 'primaryColor', 'logoBgColor', 'initialMessage', 'defaultTheme', 'systemPrompt', 'openaiApiKey', 'openaiModel', 'embeddingModel', 'inputPlaceholder', 'sendButtonText', 'iconChat', 'iconThumbUp', 'iconThumbDown', 'iconClose', 'iconNewChat', 'iconThemeLight', 'iconThemeDark'], 'string'],
             [['enabled', 'logConversations', 'autoTrainOnSave', 'enableRatings', 'suggestionsEnabled'], 'boolean'],
             [['logRetentionDays', 'maxContextChunks', 'logoAssetId'], 'integer', 'min' => 0],
             [['minSimilarityScore'], 'number', 'min' => 0, 'max' => 1],
@@ -76,6 +85,13 @@ class Settings extends Model
             'companyDescription' => Craft::t('chatagent', 'About the Company / Website'),
             'inputPlaceholder'   => Craft::t('chatagent', 'Input Placeholder'),
             'sendButtonText'     => Craft::t('chatagent', 'Send Button Text'),
+            'iconChat'           => Craft::t('chatagent', 'Chat Button Icon'),
+            'iconThumbUp'        => Craft::t('chatagent', 'Thumb Up Icon'),
+            'iconThumbDown'      => Craft::t('chatagent', 'Thumb Down Icon'),
+            'iconClose'          => Craft::t('chatagent', 'Close Button Icon'),
+            'iconNewChat'        => Craft::t('chatagent', 'New Chat Button Icon'),
+            'iconThemeLight'     => Craft::t('chatagent', 'Theme Toggle Icon (Light Mode)'),
+            'iconThemeDark'      => Craft::t('chatagent', 'Theme Toggle Icon (Dark Mode)'),
             'enableRatings'      => Craft::t('chatagent', 'Enable Ratings'),
             'suggestionsEnabled' => Craft::t('chatagent', 'Enable Suggestions'),
             'suggestions'        => Craft::t('chatagent', 'Suggestions'),

@@ -40,7 +40,7 @@ No template changes are required. Once enabled, the widget is automatically inje
 - **Queue Manager Support** - background processing, no UI blocking
 - **Custom System Prompt** - full control over AI persona and behavior
 - **Light / Dark Mode** toggle in the chat widget
-- **Full Customization** - colors, logo, company name, greeting, input placeholder, send button text, preset questions
+- **Full Customization** - colors, logo, company name, greeting, input placeholder, send button text, preset questions, widget icons
 - **Log Color Grading** - confidence levels highlighted at a glance
 
 ---
@@ -232,6 +232,20 @@ All settings are under **Chatbot → Settings**, organized in tabs.
 | Default Theme | Start in Light or Dark mode |
 | Input Placeholder | Placeholder text inside the message input field (default: `Your message...`) |
 | Send Button Text | Label on the send button (default: `Send`) |
+
+### Icons
+
+Configure the icon for each widget element. Enter the **full CSS class string** for any icon library — the value is applied directly as the `class` attribute on an `<i>` element. A live Font Awesome preview is shown as you type (only FA icons render in the CP preview; on the frontend, whichever library your site loads is used).
+
+| Setting | Default | Example alternatives |
+|---------|---------|----------------------|
+| Chat Button Icon | `fas fa-comments` | `far fa-comment`, `bi bi-chat-dots` |
+| Close Button Icon | `fas fa-times` | `fas fa-xmark`, `bi bi-x-lg` |
+| New Chat / Reset Icon | `fas fa-sync-alt` | `fas fa-rotate`, `bi bi-arrow-counterclockwise` |
+| Theme Toggle – Light Mode | `fas fa-moon` | `far fa-moon`, `bi bi-moon` |
+| Theme Toggle – Dark Mode | `fas fa-sun` | `far fa-sun`, `bi bi-sun` |
+| Thumb Up Icon | `fas fa-thumbs-up` | `far fa-thumbs-up`, `bi bi-hand-thumbs-up` |
+| Thumb Down Icon | `fas fa-thumbs-down` | `far fa-thumbs-down`, `bi bi-hand-thumbs-down` |
 
 ### Company
 

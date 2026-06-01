@@ -209,6 +209,13 @@ class LogsController extends Controller
             'companyDescription' => $request->getBodyParam('companyDescription', ''),
             'inputPlaceholder'   => $request->getBodyParam('inputPlaceholder', 'Your message...'),
             'sendButtonText'     => $request->getBodyParam('sendButtonText', 'Send'),
+            'iconChat'           => $request->getBodyParam('iconChat', 'fas fa-comments'),
+            'iconThumbUp'        => $request->getBodyParam('iconThumbUp', 'fas fa-thumbs-up'),
+            'iconThumbDown'      => $request->getBodyParam('iconThumbDown', 'fas fa-thumbs-down'),
+            'iconClose'          => $request->getBodyParam('iconClose', 'fas fa-times'),
+            'iconNewChat'        => $request->getBodyParam('iconNewChat', 'fas fa-sync-alt'),
+            'iconThemeLight'     => $request->getBodyParam('iconThemeLight', 'fas fa-moon'),
+            'iconThemeDark'      => $request->getBodyParam('iconThemeDark', 'fas fa-sun'),
         ];
 
         if (Chatagent::getInstance()->getChatService()->saveSettings($settings)) {

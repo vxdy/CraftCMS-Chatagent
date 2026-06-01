@@ -13,6 +13,7 @@
 
         <nav class="custom-tabs" style="display:flex; border-bottom: 2px solid #e3e5e8; margin-bottom: 24px; gap: 0;">
             <button type="button" class="custom-tab sel" data-target="tab-general">{{ "General"|t('chatagent') }}</button>
+            <button type="button" class="custom-tab" data-target="tab-icons">{{ "Icons"|t('chatagent') }}</button>
             <button type="button" class="custom-tab" data-target="tab-company">{{ "Company"|t('chatagent') }}</button>
             <button type="button" class="custom-tab" data-target="tab-ai">{{ "AI Configuration"|t('chatagent') }}</button>
             <button type="button" class="custom-tab" data-target="tab-training">{{ "Training"|t('chatagent') }}</button>
@@ -127,6 +128,78 @@
 
         </div>{# /tab-general #}
 
+        {# ── Tab: Icons ────────────────────────────────────────── #}
+        <div id="tab-icons" class="hidden">
+
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+
+            <p style="color: #596673; margin-bottom: 8px;">
+                {{ "Enter the full CSS class string for any icon library - e.g. <code>fas fa-comments</code> (Font Awesome), <code>bi bi-chat-dots</code> (Bootstrap Icons), <code>material-icons chat</code>. The class is applied as-is to an <code>&lt;i&gt;</code> element in the widget."|t('chatagent')|raw }}
+            </p>
+            <p style="color: #8f98a3; font-size: 12px; margin-bottom: 24px;">
+                {{ "Preview only works for Font Awesome (loaded here). On the frontend, whichever icon library your site loads will be used."|t('chatagent') }}
+                <a href="https://fontawesome.com/icons?d=gallery&o=r&s=solid&m=free" target="_blank" rel="noopener">fontawesome.com/icons</a>
+            </p>
+
+            <style>
+                .icon-field-row { display: flex; align-items: center; gap: 12px; }
+                .icon-field-row .nicetext { flex: 1; max-width: 320px; }
+                .icon-preview { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 1px solid #d0d5dd; border-radius: 6px; background: #f8f9fa; font-size: 18px; color: #3f4d5a; flex-shrink: 0; }
+                .icon-field-row .icon-preview-label { color: #8f98a3; font-size: 12px; font-style: italic; }
+            </style>
+
+            {% set iconFields = [
+                { name: 'iconChat',       label: 'Chat Button (floating button bottom-right)',  default: 'fas fa-comments',   instructions: 'Icon on the main floating button that opens the chat window.' },
+                { name: 'iconClose',      label: 'Close Button',                                default: 'fas fa-times',      instructions: 'Icon for the close button in the chat header.' },
+                { name: 'iconNewChat',    label: 'New Chat / Reset Button',                     default: 'fas fa-sync-alt',   instructions: 'Icon for the reset/refresh button that starts a new conversation.' },
+                { name: 'iconThemeLight', label: 'Theme Toggle - Light Mode',                   default: 'fas fa-moon',       instructions: 'Icon shown in light mode. Clicking it switches to dark mode.' },
+                { name: 'iconThemeDark',  label: 'Theme Toggle - Dark Mode',                    default: 'fas fa-sun',        instructions: 'Icon shown in dark mode. Clicking it switches to light mode.' },
+                { name: 'iconThumbUp',    label: 'Thumb Up (rating)',                           default: 'fas fa-thumbs-up',  instructions: 'Icon for the positive rating button below bot messages.' },
+                { name: 'iconThumbDown',  label: 'Thumb Down (rating)',                         default: 'fas fa-thumbs-down', instructions: 'Icon for the negative rating button below bot messages.' },
+            ] %}
+
+            {% for field in iconFields %}
+                {% set currentValue = attribute(settings, field.name) | default(field.default) %}
+                <div class="field" style="margin-bottom: 20px;">
+                    <div class="heading">
+                        <label for="{{ field.name }}">{{ field.label|t('chatagent') }}</label>
+                        <div class="instructions"><p>{{ field.instructions|t('chatagent') }}</p></div>
+                    </div>
+                    <div class="input icon-field-row">
+                        <input
+                            id="{{ field.name }}"
+                            name="{{ field.name }}"
+                            type="text"
+                            class="nicetext code"
+                            value="{{ currentValue }}"
+                            placeholder="{{ field.default }}"
+                            data-icon-preview="preview-{{ field.name }}"
+                            autocomplete="off"
+                        >
+                        <div class="icon-preview" id="preview-{{ field.name }}">
+                            <i class="{{ currentValue }}"></i>
+                        </div>
+                        <span class="icon-preview-label">{{ "Preview"|t('chatagent') }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <script>
+            (function () {
+                document.querySelectorAll('[data-icon-preview]').forEach(function (input) {
+                    var previewId = input.dataset.iconPreview;
+                    input.addEventListener('input', function () {
+                        var preview = document.getElementById(previewId);
+                        if (preview) {
+                            preview.innerHTML = '<i class="' + input.value.trim() + '"></i>';
+                        }
+                    });
+                });
+            })();
+            </script>
+
+        </div>{# /tab-icons #}
+
         {# ── Tab: Company / Website ────────────────────────────── #}
         <div id="tab-company" class="hidden">
 
@@ -217,19 +290,19 @@
                             <td style="padding: 6px 8px 6px 0;"><code>text-embedding-3-small</code></td>
                             <td style="padding: 6px 8px;">1.536</td>
                             <td style="padding: 6px 8px;">$0.02 / 1M tokens</td>
-                            <td style="padding: 6px 0;">{{ "Ideal for most use cases – fast, affordable"|t('chatagent') }}</td>
+                            <td style="padding: 6px 0;">{{ "Ideal for most use cases - fast, affordable"|t('chatagent') }}</td>
                         </tr>
                         <tr style="background: #f0f0f0;">
                             <td style="padding: 6px 8px 6px 0;"><code>text-embedding-3-large</code></td>
                             <td style="padding: 6px 8px;">3.072</td>
                             <td style="padding: 6px 8px;">$0.13 / 1M tokens</td>
-                            <td style="padding: 6px 0;">{{ "Higher precision for complex texts – ~6× more expensive than small"|t('chatagent') }}</td>
+                            <td style="padding: 6px 0;">{{ "Higher precision for complex texts - ~6× more expensive than small"|t('chatagent') }}</td>
                         </tr>
                         <tr>
                             <td style="padding: 6px 8px 6px 0;"><code>text-embedding-ada-002</code></td>
                             <td style="padding: 6px 8px;">1.536</td>
                             <td style="padding: 6px 8px;">$0.10 / 1M tokens</td>
-                            <td style="padding: 6px 0;">{{ "Older model – only use if already trained with it"|t('chatagent') }}</td>
+                            <td style="padding: 6px 0;">{{ "Older model - only use if already trained with it"|t('chatagent') }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -268,7 +341,7 @@
 
             {{ forms.textField({
                 label: "Min. Similarity Score"|t('chatagent'),
-                instructions: "Threshold (0.00–1.00) for cosine similarity. Lower values return more results but may be less relevant."|t('chatagent'),
+                instructions: "Threshold (0.00-1.00) for cosine similarity. Lower values return more results but may be less relevant."|t('chatagent'),
                 id: 'minSimilarityScore',
                 name: 'minSimilarityScore',
                 value: settings.minSimilarityScore,
@@ -381,7 +454,7 @@
 <script>
 (function () {
     var tabs   = document.querySelectorAll('.custom-tab');
-    var panels = ['tab-general', 'tab-company', 'tab-ai', 'tab-training', 'tab-suggestions', 'tab-logging'];
+    var panels = ['tab-general', 'tab-icons', 'tab-company', 'tab-ai', 'tab-training', 'tab-suggestions', 'tab-logging'];
 
     tabs.forEach(function(btn) {
         btn.addEventListener('click', function() {

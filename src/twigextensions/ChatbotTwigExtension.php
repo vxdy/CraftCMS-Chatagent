@@ -3,7 +3,7 @@
 namespace eventiva\craftchatagent\twigextensions;
 
 use Craft;
-use eventiva\craftchatagent\assetbundles\ChatbotAssetBundle;
+use craft\helpers\UrlHelper;
 use eventiva\craftchatagent\Chatagent;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -35,8 +35,12 @@ class ChatbotTwigExtension extends AbstractExtension
 
         $view = Craft::$app->getView();
 
-        // Register asset bundle (JS + CSS)
-        $view->registerAssetBundle(ChatbotAssetBundle::class);
+        // Publish web assets and register files with mtime-based cache busting
+        [$basePath, $baseUrl] = Craft::$app->assetManager->publish(__DIR__ . '/../web');
+        $jsMtime  = @filemtime(__DIR__ . '/../web/js/chatbot-widget.js') ?: 0;
+        $cssMtime = @filemtime(__DIR__ . '/../web/css/chatbot-widget.css') ?: 0;
+        $view->registerCssFile($baseUrl . '/css/chatbot-widget.css?v=' . $cssMtime);
+        $view->registerJsFile($baseUrl . '/js/chatbot-widget.js?v=' . $jsMtime);
 
         // Resolve logo asset URL via transform so object storage serves it correctly
         $logoUrl = '';
@@ -47,12 +51,40 @@ class ChatbotTwigExtension extends AbstractExtension
             }
         }
 
-        // Render the initialization script template
-        return $view->renderTemplate('chatbot/_widget', [
-            'settings' => $settings,
-            'logoUrl' => $logoUrl,
-            'csrfTokenName' => Craft::$app->getConfig()->getGeneral()->csrfTokenName,
-            'csrfTokenValue' => Craft::$app->getRequest()->getCsrfToken(),
-        ]);
+        // Build ChatbotConfig directly in PHP - no Twig template cache between settings and widget
+        $config = json_encode([
+            'apiUrl'          => UrlHelper::siteUrl('chatbot/message'),
+            'rateUrl'         => UrlHelper::siteUrl('chatbot/rate'),
+            'csrfTokenName'   => Craft::$app->getConfig()->getGeneral()->csrfTokenName,
+            'csrfTokenValue'  => Craft::$app->getRequest()->getCsrfToken(),
+            'companyName'     => $settings['companyName'] ?? '',
+            'logoText'        => $settings['logoText'] ?? '',
+            'logoUrl'         => $logoUrl,
+            'primaryColor'    => $settings['primaryColor'] ?? '#7C3AED',
+            'initialMessage'  => $settings['initialMessage'] ?? '',
+            'defaultTheme'    => $settings['defaultTheme'] ?? 'light',
+            'inputPlaceholder'=> $settings['inputPlaceholder'] ?: 'Your message...',
+            'sendButtonText'  => $settings['sendButtonText'] ?: 'Send',
+            'enableRatings'   => (bool)($settings['enableRatings'] ?? true),
+            'suggestionsEnabled' => (bool)($settings['suggestionsEnabled'] ?? true),
+            'suggestions'     => $settings['suggestions'] ?? [],
+            'iconChat'        => $settings['iconChat'] ?: 'fas fa-comments',
+            'iconThumbUp'     => $settings['iconThumbUp'] ?: 'fas fa-thumbs-up',
+            'iconThumbDown'   => $settings['iconThumbDown'] ?: 'fas fa-thumbs-down',
+            'iconClose'       => $settings['iconClose'] ?: 'fas fa-times',
+            'iconNewChat'     => $settings['iconNewChat'] ?: 'fas fa-sync-alt',
+            'iconThemeLight'  => $settings['iconThemeLight'] ?: 'fas fa-moon',
+            'iconThemeDark'   => $settings['iconThemeDark'] ?: 'fas fa-sun',
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG);
+
+        $primaryColor = htmlspecialchars($settings['primaryColor'] ?? '#7C3AED', ENT_QUOTES);
+        $logoBgColor  = htmlspecialchars($settings['logoBgColor'] ?? $primaryColor, ENT_QUOTES);
+
+        return <<<HTML
+<style>
+.chatbot-button,.chatbot-container{--chatbot-primary:{$primaryColor};--chatbot-user-msg:{$primaryColor};--chatbot-logo-bg:{$logoBgColor};}
+</style>
+<script>var ChatbotConfig = {$config};</script>
+HTML;
     }
 }

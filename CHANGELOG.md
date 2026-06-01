@@ -1,12 +1,25 @@
 # Release Notes for Chatagent
 
+## 1.3.0 - 2026-06-01
+
+### Added
+- **Icon Customization** – All 7 widget icons are now configurable per-install under Settings → Icons: chat button, close, new chat/reset, theme toggle (light/dark mode), thumb up and thumb down ratings.
+- Icons accept any full CSS class string, making the system icon-library-agnostic - e.g. `fas fa-comments` (Font Awesome), `bi bi-chat-dots` (Bootstrap Icons), or any other library loaded on the frontend. A live preview is shown in the CP as you type.
+- Rating buttons now use the configurable icon classes instead of hardcoded inline SVG.
+
+### Fixed
+- `ChatbotConfig` was generated via a Twig template which could be served from Craft's compiled template cache after updates. Config is now built directly in PHP via `json_encode()`, ensuring settings are always read fresh from the database.
+- Widget JS and CSS are now served with a file-modification-time `?v=` cache-busting parameter, preventing browsers from running outdated widget code after plugin updates.
+
+---
+
 ## 1.2.0 - 2026-05-21
 
 ### Added
 - **Widget Label Customization** – Input placeholder and send button text are now configurable per-install under Settings → General → Widget Labels. Defaults are `"Your message..."` and `"Send"`.
 
 ### Changed
-- All hardcoded German strings removed from the chat widget JS (button tooltips, error messages). The widget is now fully English by default with user-configurable labels for input and send button.
+- All hardcoded German stri"uri": "produkt/kategorie/bild-und-videotechnik-mieten/himmelstadt"ngs removed from the chat widget JS (button tooltips, error messages). The widget is now fully English by default with user-configurable labels for input and send button.
 
 ### Fixed
 - Company name title color rules now use `!important` to reliably prevent site-level heading styles from bleeding into the widget.
