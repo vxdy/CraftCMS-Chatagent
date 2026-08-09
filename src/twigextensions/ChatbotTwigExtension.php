@@ -39,7 +39,13 @@ class ChatbotTwigExtension extends AbstractExtension
         [$basePath, $baseUrl] = Craft::$app->assetManager->publish(__DIR__ . '/../web');
         $jsMtime  = @filemtime(__DIR__ . '/../web/js/chatbot-widget.js') ?: 0;
         $cssMtime = @filemtime(__DIR__ . '/../web/css/chatbot-widget.css') ?: 0;
-        $view->registerCssFile($baseUrl . '/css/chatbot-widget.css?v=' . $cssMtime);
+        $cssUrl = $baseUrl . '/css/chatbot-widget.css?v=' . $cssMtime;
+
+        $view->registerHtml(
+            '<link rel="preload" href="' . $cssUrl . '" as="style" onload="this.onload=null;this.rel=\'stylesheet\'">' .
+            '<noscript><link rel="stylesheet" href="' . $cssUrl . '"></noscript>',
+            1
+        );
         $view->registerJsFile($baseUrl . '/js/chatbot-widget.js?v=' . $jsMtime);
 
         // Resolve logo asset URL via transform so object storage serves it correctly
